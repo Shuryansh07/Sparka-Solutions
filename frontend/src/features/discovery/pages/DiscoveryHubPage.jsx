@@ -1,5 +1,8 @@
-import { Bookmark, HelpCircle, Repeat, SkipForward, UserRound } from 'lucide-react';
+import { ArrowRight, Bookmark, HelpCircle, History, Repeat, SkipForward, UserRound } from 'lucide-react';
+import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import PageHero from '@/shared/components/PageHero';
 import PathCards from '../components/PathCards';
 import { useDiscoveryStore } from '../store/discovery.store';
 
@@ -18,33 +21,47 @@ export default function DiscoveryHubPage() {
 
   return (
     <>
-      <section className="disc-hero disc-hero--hub">
-        <div className="container">
-          <span className="eyebrow">Sparka Discovery</span>
-          <h1>
-            Let’s start with <span>your needs.</span>
-          </h1>
-          <p>Choose whichever way feels easiest. Every path reaches the same people and gets the same care.</p>
-        </div>
-      </section>
+      <PageHero
+        kicker="Sparka Discovery"
+        title="Let’s start with your needs."
+        intro="Choose whichever way feels easiest. Every path reaches the same people and gets the same care."
+      />
 
-      <section className="section disc-hub">
-        <div className="container">
+      <section className="bg-steel py-14 md:py-20">
+        <div className="container-page grid gap-8">
           {hasProgress && (
-            <div className="resume-banner">
-              <div>
-                <strong>Welcome back.</strong> You have a Discovery in progress on this device.
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-spark/40 bg-[#fdf7e8] px-5 py-4"
+            >
+              <div className="flex items-center gap-3">
+                <span className="grid size-10 place-items-center rounded-xl bg-spark text-night" aria-hidden="true">
+                  <History className="size-5" />
+                </span>
+                <p>
+                  <strong>Welcome back.</strong>{' '}
+                  <span className="text-muted-foreground">You have a Discovery in progress on this device.</span>
+                </p>
               </div>
-              <Link to={resumePath} className="btn btn--primary btn--sm">
-                Continue where you left off
-              </Link>
-            </div>
+              <Button asChild size="sm" className="group">
+                <Link to={resumePath}>
+                  Continue where you left off
+                  <ArrowRight className="transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </motion.div>
           )}
+
           <PathCards />
-          <ul className="promises" aria-label="Your control">
+
+          <ul aria-label="You stay in control" className="flex flex-wrap justify-center gap-2">
             {PROMISES.map(({ icon: Icon, text }) => (
-              <li key={text}>
-                <Icon aria-hidden="true" /> {text}
+              <li
+                key={text}
+                className="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground"
+              >
+                <Icon className="size-4 text-primary" aria-hidden="true" /> {text}
               </li>
             ))}
           </ul>

@@ -1,0 +1,176 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Sparka tokens.
+ * Night petrol + brushed chrome + spark gold, taken from the logo; teal is the
+ * brand's working colour for interactive elements.
+ */
+:root {
+  --radius: 0.75rem;
+
+  --background: #ffffff;
+  --foreground: #12262b;
+  --card: #ffffff;
+  --card-foreground: #12262b;
+  --popover: #ffffff;
+  --popover-foreground: #12262b;
+  --primary: #0f7c81;
+  --primary-foreground: #ffffff;
+  --secondary: #eef3f3;
+  --secondary-foreground: #12262b;
+  --muted: #f2f6f6;
+  --muted-foreground: #566d71;
+  --accent: #e5f3f2;
+  --accent-foreground: #0b5f63;
+  --destructive: #b4423a;
+  --border: #dbe4e5;
+  --input: #c6d4d6;
+  --ring: #1a9a9e;
+
+  --night: #071b20;
+  --night-2: #0c262c;
+  --night-3: #12353c;
+  --spark: #e8b84a;
+  --spark-soft: #f3d58e;
+  --chrome: #c3ccce;
+  --steel: #f4f7f7;
+  --teal-bright: #3cc2be;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-night: var(--night);
+  --color-night-2: var(--night-2);
+  --color-night-3: var(--night-3);
+  --color-spark: var(--spark);
+  --color-spark-soft: var(--spark-soft);
+  --color-chrome: var(--chrome);
+  --color-steel: var(--steel);
+  --color-teal-bright: var(--teal-bright);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 10px);
+
+  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Archivo', 'Arial Narrow', ui-sans-serif, sans-serif;
+
+  --ease-spark: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-marquee: marquee 48s linear infinite;
+  --animate-glint: glint 5.5s ease-in-out infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes glint {
+    0%,
+    62% {
+      transform: translateX(-120%) skewX(-18deg);
+    }
+    100% {
+      transform: translateX(320%) skewX(-18deg);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: 'ss01', 'cv11';
+    overflow-x: hidden;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--spark) 45%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .container-page {
+    width: min(1200px, 100% - 2 * clamp(16px, 5vw, 48px));
+    margin-inline: auto;
+  }
+
+  /* Wide display cut, echoing the logo's extended lettering. */
+  .type-wide {
+    font-family: var(--font-display);
+    font-stretch: 118%;
+    letter-spacing: -0.022em;
+  }
+
+  /* Faint engineering grid used behind dark sections. */
+  .bg-grid-night {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 30%, transparent 100%);
+  }
+
+  .text-chrome {
+    background: linear-gradient(180deg, #ffffff 0%, #dfe6e8 45%, #9fadb1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,54 +1,75 @@
 import { Link } from 'react-router-dom';
 import { TAGLINE } from '../data/site';
+import Brand from './Brand';
+
+const COLUMNS = [
+  {
+    title: 'Explore',
+    links: [
+      ['/solutions', 'Solutions'],
+      ['/#how', 'How it works'],
+      ['/#about', 'About'],
+    ],
+  },
+  {
+    title: 'Get started',
+    links: [
+      ['/discovery/guide', 'Guide Me'],
+      ['/discovery/describe', 'Tell us what you need'],
+      ['/discovery/talk', 'Let’s Talk'],
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      ['/contact', 'Contact'],
+      ['/privacy', 'Privacy'],
+      ['/terms', 'Terms'],
+    ],
+  },
+];
 
 export default function Footer() {
   return (
-    <footer className="site-footer">
-      <div className="container site-footer__grid">
-        <div className="site-footer__brand">
-          <Link to="/" className="brand" aria-label="Sparka Solutions home">
-            <img src="/images/logo-mark.jpg" alt="" width="40" height="40" />
-            <span className="brand__word">
-              <strong>SPARKA</strong>
-              <small>SOLUTIONS</small>
-            </span>
-          </Link>
-          <p className="site-footer__tagline">{TAGLINE.toUpperCase()}</p>
-          <p>Manufacturer-independent fleet products, technology and sourcing - backed by people who listen first.</p>
+    <footer className="relative overflow-hidden bg-night text-sm text-white/60">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-spark/60 to-transparent" />
+
+      <div className="container-page grid gap-12 pt-16 pb-12 md:grid-cols-[1.5fr_repeat(3,minmax(0,1fr))] md:pt-20">
+        <div className="max-w-sm">
+          <Brand />
+          <p className="mt-5 font-display text-[15px] font-semibold text-white">{TAGLINE}</p>
+          <p className="mt-2 leading-relaxed">
+            Manufacturer-independent fleet products, technology and sourcing, backed by people who listen first.
+          </p>
         </div>
 
-        <div>
-          <h4>Explore</h4>
-          <ul>
-            <li><Link to="/solutions">Solutions</Link></li>
-            <li><Link to="/#how">How It Works</Link></li>
-            <li><Link to="/#about">About</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4>Get Started</h4>
-          <ul>
-            <li><Link to="/discovery/guide">Guide Me</Link></li>
-            <li><Link to="/discovery/describe">Tell Us What You Need</Link></li>
-            <li><Link to="/discovery/talk">Let’s Talk</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4>Company</h4>
-          <ul>
-            <li><Link to="/contact">Contact</Link></li>
-            <li><Link to="/privacy">Privacy</Link></li>
-            <li><Link to="/terms">Terms</Link></li>
-          </ul>
-        </div>
+        {COLUMNS.map((col) => (
+          <div key={col.title}>
+            <h4 className="mb-4 font-sans text-[13px] font-semibold text-white">{col.title}</h4>
+            <ul className="grid gap-2.5">
+              {col.links.map(([to, label]) => (
+                <li key={to}>
+                  <Link to={to} className="text-white/60 no-underline transition-colors hover:text-spark">
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
 
-      <div className="container site-footer__bottom">
+      <div className="container-page flex flex-wrap justify-between gap-3 border-t border-white/10 py-6 text-[13px] text-white/45">
         <span>© {new Date().getFullYear()} Sparka Solutions. All rights reserved.</span>
-        <span>Sparka Fleet - a division of Sparka Solutions</span>
+        <span>Sparka Fleet is a division of Sparka Solutions</span>
       </div>
+
+      <p
+        aria-hidden="true"
+        className="type-wide pointer-events-none -mb-[0.22em] text-center text-[clamp(72px,19vw,260px)] leading-none font-black tracking-tight text-white/[0.035] select-none"
+      >
+        SPARKA
+      </p>
     </footer>
   );
 }

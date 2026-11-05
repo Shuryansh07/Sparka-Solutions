@@ -1,10 +1,9 @@
-import { CheckCircle2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { Toaster } from '@/components/ui/sonner';
 import { useUiStore } from '../store/ui.store';
 import Footer from './Footer';
 import Header from './Header';
-import Masthead from './Masthead';
 
 function useScrollManagement() {
   const { pathname, hash } = useLocation();
@@ -22,26 +21,22 @@ function useScrollManagement() {
 }
 
 export default function SiteLayout() {
-  const { pathname } = useLocation();
-  const toast = useUiStore((s) => s.toast);
   useScrollManagement();
 
   return (
     <>
-      <a href="#main" className="skip-link">
+      <a
+        href="#main"
+        className="fixed -top-16 left-3 z-[100] rounded-lg bg-spark px-4 py-2.5 font-semibold text-night no-underline transition-[top] focus:top-3"
+      >
         Skip to content
       </a>
-      {pathname === '/' && <Masthead />}
       <Header />
       <main id="main">
         <Outlet />
       </main>
       <Footer />
-      {toast && (
-        <div className="toast" role="status">
-          <CheckCircle2 /> {toast}
-        </div>
-      )}
+      <Toaster />
     </>
   );
 }
