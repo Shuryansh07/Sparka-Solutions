@@ -1,0 +1,14 @@
+{
+  "slate": [
+    {
+      "name": "sparka-web",
+      "source": "frontend"
+    }
+  ],
+  "appsail": [
+    {
+      "name": "sparka-api",
+      "source": "backend"
+    }
+  ]
+}

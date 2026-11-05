@@ -1,0 +1,14 @@
+.legal {
+  max-width: 780px;
+  display: grid;
+  gap: 28px;
+}
+
+.legal h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.legal p {
+  color: #3c5559;
+}

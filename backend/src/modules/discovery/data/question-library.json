@@ -1,0 +1,131 @@
+{
+  "version": "1.0.0",
+  "status": "approved",
+  "approvedBy": "Sparka management (placeholder - confirm at kickoff)",
+  "notes": "Changes to this library or its order require management approval. AI may only select and rephrase approved questions.",
+  "maxQuestions": 7,
+  "questions": [
+    {
+      "id": "fleetSize",
+      "tier": "core",
+      "type": "single",
+      "prompt": "Roughly how many vehicles are in your fleet?",
+      "help": "A ballpark is perfect. Every fleet size is welcome.",
+      "options": ["1-4", "5-24", "25-99", "100-499", "500+"]
+    },
+    {
+      "id": "vehicleTypes",
+      "tier": "core",
+      "type": "multi",
+      "prompt": "What kinds of vehicles do you run?",
+      "help": "Select all that apply.",
+      "options": [
+        "Light-duty vans / pickups",
+        "Medium-duty trucks",
+        "Heavy-duty trucks",
+        "Trailers",
+        "Specialty / service vehicles",
+        "Passenger / transit",
+        "Equipment / off-road"
+      ]
+    },
+    {
+      "id": "interests",
+      "tier": "core",
+      "type": "multi",
+      "prompt": "Which areas are you looking for help with?",
+      "help": "Pick any that fit. If it is not listed, tell us in the next question.",
+      "options": [
+        "Cameras & Safety",
+        "GPS & Telematics",
+        "Racks & Storage",
+        "Lighting & Electrical",
+        "Power & Charging",
+        "Security & Access",
+        "Communications",
+        "Vehicle Upfitting",
+        "Accessories & Supplies",
+        "Specialty Sourcing"
+      ]
+    },
+    {
+      "id": "objective",
+      "tier": "core",
+      "type": "textarea",
+      "prompt": "What are you trying to accomplish?",
+      "help": "In your own words: the problem, the goal, or what prompted you to reach out.",
+      "placeholder": "e.g. We need forward and driver-facing cameras on 30 vans to reduce claims..."
+    },
+    {
+      "id": "currentSolution",
+      "tier": "core",
+      "type": "single",
+      "prompt": "Do you already have something in place today?",
+      "options": ["Yes", "Partially", "No"]
+    },
+    {
+      "id": "currentDetails",
+      "tier": "adaptive",
+      "type": "textarea",
+      "prompt": "What do you use today, and what is or isn't working?",
+      "placeholder": "Brand, how long you've had it, what you'd change...",
+      "showIf": { "question": "currentSolution", "anyOf": ["Yes", "Partially"] }
+    },
+    {
+      "id": "installation",
+      "tier": "adaptive",
+      "type": "single",
+      "prompt": "Will you need installation support?",
+      "help": "We can coordinate installation through qualified providers where needed.",
+      "options": ["Yes, please coordinate installation", "We have our own installer", "No installation needed"],
+      "showIf": {
+        "question": "interests",
+        "anyOf": [
+          "Cameras & Safety",
+          "GPS & Telematics",
+          "Racks & Storage",
+          "Lighting & Electrical",
+          "Power & Charging",
+          "Security & Access",
+          "Communications",
+          "Vehicle Upfitting"
+        ]
+      }
+    },
+    {
+      "id": "timing",
+      "tier": "extended",
+      "type": "single",
+      "prompt": "When are you hoping to move forward?",
+      "options": ["Immediately", "Within 30 days", "1-3 months", "3+ months", "Just exploring"]
+    },
+    {
+      "id": "geography",
+      "tier": "extended",
+      "type": "text",
+      "prompt": "Where are your vehicles based or operating?",
+      "placeholder": "City / state, or regions"
+    },
+    {
+      "id": "mustHaves",
+      "tier": "extended",
+      "type": "textarea",
+      "prompt": "Any must-haves or nice-to-haves?",
+      "placeholder": "Must integrate with our dispatch software; nice to have driver coaching..."
+    },
+    {
+      "id": "constraints",
+      "tier": "extended",
+      "type": "textarea",
+      "prompt": "Any constraints we should know about?",
+      "placeholder": "Budget range, union rules, downtime windows, approved vendor lists..."
+    },
+    {
+      "id": "budget",
+      "tier": "extended",
+      "type": "text",
+      "prompt": "Do you have a budget range in mind?",
+      "placeholder": "Optional"
+    }
+  ]
+}
