@@ -16,7 +16,7 @@ const TermsPage = lazy(() => import('../features/legal/TermsPage'));
 const NotFoundPage = lazy(() => import('../features/not-found/NotFoundPage'));
 
 const page = (Component) => (
-  <Suspense fallback={<div className="route-loading" aria-busy="true" />}>
+  <Suspense fallback={<div className="min-h-[70vh] bg-steel" aria-busy="true" />}>
     <Component />
   </Suspense>
 );

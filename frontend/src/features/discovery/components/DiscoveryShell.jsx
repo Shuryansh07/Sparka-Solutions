@@ -1,10 +1,12 @@
 import { Headset, Lock, ShieldCheck } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import PageHero from '@/shared/components/PageHero';
 import { useDiscoveryStore } from '../store/discovery.store';
 import PathSwitcher from './PathSwitcher';
 import SaveForLater from './SaveForLater';
-import '../discovery.css';
 
 export default function DiscoveryShell({ route, title, intro, children }) {
   const clearError = useDiscoveryStore((s) => s.clearError);
@@ -17,46 +19,52 @@ export default function DiscoveryShell({ route, title, intro, children }) {
 
   return (
     <>
-      <section className="disc-hero">
-        <div className="container">
-          <span className="eyebrow">Sparka Discovery</span>
-          <h1>{title}</h1>
-          {intro && <p>{intro}</p>}
-          <PathSwitcher />
-        </div>
-      </section>
+      <PageHero kicker="Sparka Discovery" title={title} intro={intro}>
+        <PathSwitcher />
+      </PageHero>
 
-      <section className="disc-body">
-        <div className="container disc-layout">
-          <div className="disc-main">{children}</div>
+      <section className="bg-steel py-10 md:py-16">
+        <div className="container-page grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-8">
+          <div className="min-w-0">{children}</div>
 
-          <aside className="disc-aside" aria-label="Help">
+          <aside aria-label="Help" className="grid gap-4 lg:sticky lg:top-24">
             {route !== 'talk' && (
-              <div className="aside-card aside-card--dark">
-                <Headset aria-hidden="true" />
-                <h3>Prefer a person?</h3>
-                <p>You can switch to a conversation at any point - nothing you’ve shared is lost.</p>
-                <Link to="/discovery/talk" className="btn btn--gold btn--sm btn--block">
-                  Talk to a person
-                </Link>
+              <div className="relative isolate overflow-hidden rounded-2xl bg-night p-6 text-white">
+                <div aria-hidden="true" className="absolute -top-16 -right-16 -z-10 size-40 rounded-full bg-spark/20 blur-3xl" />
+                <Headset className="size-6 text-spark" aria-hidden="true" />
+                <h3 className="mt-3 text-lg font-bold">Prefer a person?</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-white/65">
+                  Switch to a conversation at any point. Nothing you’ve shared is lost.
+                </p>
+                <Button asChild variant="spark" size="sm" className="mt-4 w-full">
+                  <Link to="/discovery/talk">Talk to a person</Link>
+                </Button>
               </div>
             )}
 
             {route !== 'talk' && (
-              <div className="aside-card">
-                <h3>Not ready to finish?</h3>
-                <p>Your answers are kept on this device. Save a link to resume anywhere.</p>
+              <Card className="gap-0 p-6">
+                <h3 className="text-lg font-bold">Not ready to finish?</h3>
+                <p className="mt-1.5 mb-4 text-sm leading-relaxed text-muted-foreground">
+                  Your answers are kept on this device. Save a link to resume anywhere.
+                </p>
                 <SaveForLater route={route} />
-              </div>
+              </Card>
             )}
 
-            <ul className="aside-assurances">
-              <li>
-                <ShieldCheck aria-hidden="true" /> No proposal is sent until a representative has spoken with you.
+            <ul className="grid gap-3 px-1 text-[13px] leading-relaxed text-muted-foreground">
+              <li className="flex gap-2.5">
+                <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                No proposal is sent until a representative has spoken with you.
               </li>
-              <li>
-                <Lock aria-hidden="true" /> We only use what you share to help with your request.{' '}
-                <Link to="/privacy">Privacy</Link>
+              <li className="flex gap-2.5">
+                <Lock className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                <span>
+                  We only use what you share to help with your request.{' '}
+                  <Link to="/privacy" className="font-medium text-primary underline-offset-4 hover:underline">
+                    Privacy
+                  </Link>
+                </span>
               </li>
             </ul>
           </aside>

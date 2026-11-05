@@ -1,13 +1,18 @@
 import { AlertCircle, Info, ShieldCheck } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
-const ICONS = { info: Info, gold: ShieldCheck, error: AlertCircle };
+const TONES = {
+  info: { icon: Info, variant: 'default' },
+  gold: { icon: ShieldCheck, variant: 'spark' },
+  error: { icon: AlertCircle, variant: 'destructive' },
+};
 
-export default function Notice({ tone = 'info', children }) {
-  const Icon = ICONS[tone];
+export default function Notice({ tone = 'info', children, className }) {
+  const { icon: Icon, variant } = TONES[tone];
   return (
-    <div className={`notice${tone !== 'info' ? ` notice--${tone}` : ''}`} role={tone === 'error' ? 'alert' : undefined}>
+    <Alert variant={variant} role={tone === 'error' ? 'alert' : 'note'} className={className}>
       <Icon aria-hidden="true" />
-      <div>{children}</div>
-    </div>
+      <AlertDescription>{children}</AlertDescription>
+    </Alert>
   );
 }

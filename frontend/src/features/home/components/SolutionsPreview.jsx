@@ -1,31 +1,26 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import SolutionCard from '../../solutions/components/SolutionCard';
-import { SOLUTION_CATEGORIES } from '../../solutions/solutions.data';
-import '../../solutions/solutions.css';
+import { Button } from '@/components/ui/button';
+import SectionHeading from '@/shared/components/SectionHeading';
+import SolutionGrid from '../../solutions/components/SolutionGrid';
 
 export default function SolutionsPreview() {
   return (
-    <section className="section" id="solutions">
-      <div className="container">
-        <div className="section-head">
-          <span className="eyebrow eyebrow--teal">Broad Product Sourcing</span>
-          <h2>Everything your fleet needs. One place to start.</h2>
-          <p>
-            From a single replacement accessory to a complex, multi-vehicle project, Sparka helps you navigate a broad
-            marketplace of commercial fleet products. These are examples - not the limits of what we can source.
-          </p>
+    <section id="solutions" className="py-20 md:py-28">
+      <div className="container-page">
+        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-2">
+          <SectionHeading
+            title="Everything your fleet needs. One place to start."
+            intro="From a single replacement accessory to a complex, multi-vehicle project. These are examples, not the limits of what we can source."
+          />
+          <Button asChild variant="outline" className="group mb-10 md:mb-14">
+            <Link to="/solutions">
+              Explore our approach
+              <ArrowRight className="transition-transform group-hover:translate-x-1" />
+            </Link>
+          </Button>
         </div>
-        <div className="solution-grid">
-          {SOLUTION_CATEGORIES.map((c) => (
-            <SolutionCard key={c.title} {...c} />
-          ))}
-        </div>
-        <div className="center-row">
-          <Link to="/solutions" className="btn btn--ghost">
-            Explore our approach <ArrowRight />
-          </Link>
-        </div>
+        <SolutionGrid />
       </div>
     </section>
   );
