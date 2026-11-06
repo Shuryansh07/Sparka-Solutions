@@ -81,18 +81,6 @@ export default function Hero() {
       <div aria-hidden="true" className="absolute -top-48 -left-40 -z-10 size-[560px] rounded-full bg-primary/25 blur-[130px]" />
 
       <div className="container-page pt-14 md:pt-24">
-        <motion.p
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] py-1 pr-3.5 pl-1 text-[13px] text-white/75 backdrop-blur"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease }}
-        >
-          <span className="shrink-0 rounded-full bg-spark px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap text-night">
-            Fleet partner
-          </span>
-          Manufacturer-independent sourcing and support
-        </motion.p>
-
         <h1 className="type-wide text-[clamp(38px,6.4vw,88px)] leading-[0.96] font-extrabold">
           <Line delay={0.15}>The right technology.</Line>
           <SparkStreak />
