@@ -18,7 +18,7 @@ export default function PageHero({ kicker, title, intro, image, children, classN
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
         >
-          <img src={image} alt="" className="size-full object-cover" />
+          <img src={image} alt="" decoding="async" className="size-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-night via-night/60 to-night/10" />
           <div className="absolute inset-0 bg-gradient-to-t from-night/80 to-transparent" />
         </motion.div>

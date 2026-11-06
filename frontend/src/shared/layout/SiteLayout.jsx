@@ -1,10 +1,26 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { Toaster } from '@/components/ui/sonner';
-import ChatbotWidget from '@/features/discovery/components/ChatbotWidget';
 import { useUiStore } from '../store/ui.store';
 import Footer from './Footer';
 import Header from './Header';
+
+// The assistant isn't needed for first paint, so load its code once the browser is idle.
+const ChatbotWidget = lazy(() => import('@/features/discovery/components/ChatbotWidget'));
+const Toaster = lazy(() => import('@/components/ui/sonner').then((m) => ({ default: m.Toaster })));
+
+function useWhenIdle() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const go = () => setReady(true);
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(go, { timeout: 3000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = setTimeout(go, 1500);
+    return () => clearTimeout(id);
+  }, []);
+  return ready;
+}
 
 function useScrollManagement() {
   const { pathname, hash } = useLocation();
@@ -23,6 +39,7 @@ function useScrollManagement() {
 
 export default function SiteLayout() {
   useScrollManagement();
+  const idle = useWhenIdle();
 
   return (
     <>
@@ -37,8 +54,12 @@ export default function SiteLayout() {
         <Outlet />
       </main>
       <Footer />
-      <ChatbotWidget />
-      <Toaster />
+      {idle && (
+        <Suspense fallback={null}>
+          <ChatbotWidget />
+          <Toaster />
+        </Suspense>
+      )}
     </>
   );
 }

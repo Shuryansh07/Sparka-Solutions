@@ -11,9 +11,32 @@
     <link rel="icon" type="image/jpeg" href="/images/logo-mark.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fonts load without blocking first paint; text shows in the fallback font, then swaps. -->
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist:wght@300..700&display=swap"
+    />
+    <link
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist:wght@300..700&display=swap"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist:wght@300..700&display=swap"
+      />
+    </noscript>
+    <link
+      rel="preload"
+      as="image"
+      type="image/webp"
+      href="/images/hero-highway-1600.webp"
+      imagesrcset="/images/hero-highway-960.webp 960w, /images/hero-highway-1600.webp 1600w"
+      imagesizes="(min-width: 1280px) 1200px, 100vw"
+      fetchpriority="high"
     />
     <title>Sparka Solutions | The Right Technology. The Right Solution.</title>
   </head>
