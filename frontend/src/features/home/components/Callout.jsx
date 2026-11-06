@@ -20,7 +20,7 @@ export default function Callout() {
             className="absolute bottom-[-60%] left-1/2 -z-10 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-spark/25 blur-[120px]"
           />
           <img
-            src="/images/logo-mark.jpg"
+            src="/images/logo-mark-128.webp"
             alt=""
             width="64"
             height="64"

@@ -45,7 +45,7 @@ export default function Footer() {
 
         {COLUMNS.map((col) => (
           <div key={col.title}>
-            <h4 className="mb-4 font-sans text-[13px] font-semibold text-white">{col.title}</h4>
+            <h2 className="mb-4 font-sans text-[13px] font-semibold text-white">{col.title}</h2>
             <ul className="grid gap-2.5">
               {col.links.map(([to, label]) => (
                 <li key={to}>
@@ -59,17 +59,16 @@ export default function Footer() {
         ))}
       </div>
 
-      <div className="container-page flex flex-wrap justify-between gap-3 border-t border-white/10 py-6 text-[13px] text-white/45">
+      <div className="container-page flex flex-wrap justify-between gap-3 border-t border-white/10 py-6 text-[13px] text-white/55">
         <span>© {new Date().getFullYear()} Sparka Solutions. All rights reserved.</span>
         <span>Sparka Fleet is a division of Sparka Solutions</span>
       </div>
 
-      <p
+      {/* Decorative watermark, drawn with CSS content so it isn't treated as readable text */}
+      <div
         aria-hidden="true"
-        className="type-wide pointer-events-none -mb-[0.22em] text-center text-[clamp(72px,19vw,260px)] leading-none font-black tracking-tight text-white/[0.035] select-none"
-      >
-        SPARKA
-      </p>
+        className="type-wide pointer-events-none -mb-[0.22em] text-center text-[clamp(72px,19vw,260px)] leading-none font-black tracking-tight text-white/[0.035] select-none before:content-['SPARKA']"
+      />
     </footer>
   );
 }

@@ -3,14 +3,14 @@ import SectionHeading from '@/shared/components/SectionHeading';
 
 const CARDS = [
   {
-    img: '/images/fleet-convoy.jpg',
+    img: '/images/fleet-convoy.webp',
     alt: 'A convoy of freight trucks on a highway under a golden sunset',
     kicker: 'Large and national fleets',
     title: 'Support for operations at scale',
     text: 'Broad sourcing, multi-vehicle projects and coordinated solutions across locations.',
   },
   {
-    img: '/images/fleet-vans.jpg',
+    img: '/images/fleet-vans.webp',
     alt: 'A row of white service vans parked and ready for the day',
     kicker: 'Small and growing fleets',
     title: 'Personal attention for every vehicle',

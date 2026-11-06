@@ -19,7 +19,7 @@ export default function SolutionsPage() {
     <>
       <PageHero
         kicker="Solutions and approach"
-        image="/images/fleet-vans.jpg"
+        image="/images/fleet-vans.webp"
         title="Everything your fleet needs. One place to start."
         intro="Sparka is manufacturer-independent. We research and source across a broad marketplace of commercial fleet products. These categories are examples, not the limits of what we can find."
       />

@@ -19,7 +19,7 @@ export default function ContactPage() {
     <>
       <PageHero
         kicker="Contact and consultation"
-        image="/images/hero-highway.jpg"
+        image="/images/hero-highway-960.webp"
         title="Talk with a real person."
         intro="No mandatory forms, no scripted sales pitch. Tell us how to reach you and a Sparka representative will set up a phone or video consultation."
       />
