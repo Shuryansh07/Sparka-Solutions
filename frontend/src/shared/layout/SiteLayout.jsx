@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
+import ChatbotWidget from '@/features/discovery/components/ChatbotWidget';
 import { useUiStore } from '../store/ui.store';
 import Footer from './Footer';
 import Header from './Header';
@@ -36,6 +37,7 @@ export default function SiteLayout() {
         <Outlet />
       </main>
       <Footer />
+      <ChatbotWidget />
       <Toaster />
     </>
   );
