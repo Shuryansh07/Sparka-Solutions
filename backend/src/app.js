@@ -3,6 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import { config } from './config/index.js';
 import { errorHandler, notFound } from './core/middleware/error-handler.js';
+import { IMPORT_PATH } from './modules/admin/products.admin.js';
 import { attachRepository } from './repositories/index.js';
 import routes from './routes.js';
 
@@ -18,7 +19,9 @@ export function createApp() {
       methods: ['GET', 'POST', 'PUT'],
     })
   );
-  app.use(express.json({ limit: '100kb' }));
+  const json = express.json({ limit: '100kb' });
+  // The admin product import parses its own larger body (see products.admin.js).
+  app.use((req, res, next) => (req.path === IMPORT_PATH ? next() : json(req, res, next)));
 
   app.use('/api', attachRepository, routes);
   app.use(notFound);
