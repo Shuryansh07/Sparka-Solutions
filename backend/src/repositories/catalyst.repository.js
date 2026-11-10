@@ -4,8 +4,18 @@ import catalyst from 'zcatalyst-sdk-node';
 //   DiscoveryDrafts: token (varchar 64, unique), payload (text), expires_at (varchar 40)
 //   Submissions:     reference (varchar 20, unique), route (varchar 20), payload (text),
 //                    crm_status (varchar 20), crm_lead_id (varchar 40), crm_error (text)
+//   Products:        sku (varchar 64, unique), category (varchar 60), active (boolean), payload (text)
 const DRAFTS = 'DiscoveryDrafts';
 const SUBMISSIONS = 'Submissions';
+const PRODUCTS = 'Products';
+const PAGE = 300; // ZCQL returns at most 300 rows per query
+
+const productRow = (p) => ({
+  sku: p.sku,
+  category: p.category,
+  active: p.active,
+  payload: JSON.stringify(p),
+});
 
 // Only server-generated tokens/references reach queries; this guard keeps ZCQL injection impossible.
 const assertSafe = (value) => {
@@ -51,6 +61,31 @@ export function createCatalystRepository(req) {
   };
 
   return {
+    async listProducts() {
+      const products = [];
+      for (let offset = 0; ; offset += PAGE) {
+        const rows = await zcql.executeZCQLQuery(`SELECT * FROM ${PRODUCTS} LIMIT ${offset},${PAGE}`);
+        products.push(...rows.map((r) => JSON.parse(r[PRODUCTS].payload)));
+        if (rows.length < PAGE) return products;
+      }
+    },
+
+    async upsertProducts(products) {
+      let inserted = 0;
+      let updated = 0;
+      for (const product of products) {
+        const row = await findOne(PRODUCTS, 'sku', product.sku);
+        if (row) {
+          await datastore.table(PRODUCTS).updateRow({ ROWID: row.ROWID, ...productRow(product) });
+          updated++;
+        } else {
+          await datastore.table(PRODUCTS).insertRow(productRow(product));
+          inserted++;
+        }
+      }
+      return { inserted, updated };
+    },
+
     async createDraft({ token, expiresAt, ...payload }) {
       await datastore.table(DRAFTS).insertRow({
         token,
