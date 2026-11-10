@@ -16,7 +16,15 @@ const zoho = {
   taskDueDays: Number(process.env.ZOHO_TASK_DUE_DAYS || 1),
 };
 
+// The assistant is on only when explicitly configured: an OpenAI key and a model ID.
+export function chatConfig(env) {
+  const apiKey = env.OPENAI_API_KEY || '';
+  const model = env.CHAT_MODEL || '';
+  return { apiKey, model, enabled: env.CHAT_ENABLED !== 'false' && Boolean(apiKey && model) };
+}
+
 export const config = {
+  chat: chatConfig(process.env),
   // AppSail injects X_ZOHO_CATALYST_LISTEN_PORT; PORT is the local fallback.
   port: Number(process.env.X_ZOHO_CATALYST_LISTEN_PORT || process.env.PORT || 9000),
   env: process.env.NODE_ENV || 'development',
