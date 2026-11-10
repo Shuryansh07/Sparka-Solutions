@@ -50,7 +50,7 @@ function dueDate(days) {
   return d.toISOString().slice(0, 10);
 }
 
-const ROUTE_LABEL = { guide: 'Guide Me', describe: "I'll Tell You What I Need", talk: "Let's Talk" };
+const ROUTE_LABEL = { guide: 'Guide Me', describe: "I'll Tell You What I Need", talk: "Let's Talk", chat: 'Chat Assistant' };
 
 export async function syncSubmissionToCrm(submission) {
   if (!config.crmEnabled) return { status: 'skipped', leadId: null, error: null };
