@@ -114,3 +114,9 @@ test('search_products offers the approved vehicle types as an enum', async () =>
   const search = tools.definitions.find((d) => d.name === 'search_products');
   assert.deepEqual(search.parameters.properties.vehicleType.enum, [...VEHICLE_TYPES, null]);
 });
+
+test('search_products asks for English keywords', () => {
+  const { tools } = setup();
+  const search = tools.definitions.find((d) => d.name === 'search_products');
+  assert.match(search.parameters.properties.query.description, /English/);
+});

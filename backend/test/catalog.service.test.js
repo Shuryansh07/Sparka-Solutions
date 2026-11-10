@@ -97,3 +97,18 @@ test('searchProducts matches a loose vehicle type like "vans"', async () => {
   const results = await searchProducts(fakeRepo(products), { query: 'dash cam', vehicleType: 'vans' });
   assert.deepEqual(results.map((r) => r.sku), ['CAM-VAN']);
 });
+
+test('falls back to filter matches when the keywords match nothing (e.g. non-English query)', async () => {
+  const products = [
+    p('CAM-HD', 'AI driver safety camera', { vehicleTypes: ['Heavy-duty trucks'] }),
+    p('CAM-VAN', 'Dual dash cam', { vehicleTypes: ['Light-duty vans / pickups'] }),
+  ];
+  const results = await searchProducts(fakeRepo(products), {
+    query: 'cámara', category: 'Cameras & Safety', vehicleType: 'Heavy-duty trucks',
+  });
+  assert.deepEqual(results.map((r) => r.sku), ['CAM-HD']);
+});
+
+test('an unmatched query with no filters still returns []', async () => {
+  assert.deepEqual(await searchProducts(fakeRepo(), { query: 'cámara' }), []);
+});

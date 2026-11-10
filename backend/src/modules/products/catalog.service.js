@@ -1,3 +1,5 @@
+import { VEHICLE_TYPES } from './products.validation.js';
+
 // In-process catalog cache + keyword search. Search runs over the cached array only, so no
 // model- or visitor-supplied text ever reaches a database query.
 const TTL_MS = 5 * 60 * 1000;
@@ -20,8 +22,11 @@ async function activeProducts(repo) {
 
 const toSummary = ({ sku, name, brand, category, summary }) => ({ sku, name, brand, category, summary });
 
-// Vehicle types are matched loosely: "vans" should find "Light-duty vans / pickups".
+// An approved vehicle type must match exactly ("Heavy-duty trucks" must not match
+// "Light-duty vans / pickups" via "duty"). Anything else is matched loosely, so "vans"
+// still finds "Light-duty vans / pickups".
 function fitsVehicle(product, vehicleType) {
+  if (VEHICLE_TYPES.includes(vehicleType)) return product.vehicleTypes.includes(vehicleType);
   const wanted = vehicleType.toLowerCase();
   const words = wanted.split(/[^a-z0-9]+/).filter((w) => w.length >= 3);
   return product.vehicleTypes.some((type) => {
@@ -53,11 +58,18 @@ export async function searchProducts(repo, { query, category, vehicleType, limit
   if (!words.length && !category && !vehicleType) return [];
 
   const max = Math.min(Math.max(Number.isInteger(limit) ? limit : DEFAULT_LIMIT, 1), MAX_LIMIT);
-  return (await activeProducts(repo))
+  const filtered = (await activeProducts(repo))
     .filter((p) => !category || p.category === category)
-    .filter((p) => !vehicleType || fitsVehicle(p, vehicleType))
+    .filter((p) => !vehicleType || fitsVehicle(p, vehicleType));
+
+  let ranked = filtered
     .map((p) => ({ p, s: words.length ? score(p, words) : 1 }))
-    .filter(({ s }) => s > 0)
+    .filter(({ s }) => s > 0);
+  // Keywords that match nothing (e.g. a non-English word) shouldn't hide products the
+  // category / vehicle filters already found.
+  if (!ranked.length && (category || vehicleType)) ranked = filtered.map((p) => ({ p, s: 1 }));
+
+  return ranked
     .sort((a, b) => b.s - a.s || a.p.name.localeCompare(b.p.name))
     .slice(0, max)
     .map(({ p }) => toSummary(p));

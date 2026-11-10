@@ -22,7 +22,7 @@ const DEFINITIONS = [
     'Search the Sparka product catalog. Use it before naming or recommending any product. Returns short summaries; ' +
       'an empty list means nothing matched.',
     {
-      query: nullable({ type: 'string', description: 'Keywords, e.g. "dash cam vans". Null if filtering only.' }),
+      query: nullable({ type: 'string', description: 'Keywords in English (translate if the visitor writes in another language), e.g. "dash cam vans". Null if filtering only.' }),
       category: { type: ['string', 'null'], enum: [...CATEGORIES, null], description: 'Approved category, or null.' },
       vehicleType: {
         type: ['string', 'null'],
