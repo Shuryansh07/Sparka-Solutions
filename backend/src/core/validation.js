@@ -7,7 +7,9 @@ export const CONTACT_METHODS = ['phone', 'email', 'video'];
 
 export const cleanText = (value, max) => (typeof value === 'string' ? value.trim().slice(0, max) : '');
 
-export function cleanContact(input = {}, { required = true } = {}) {
+export function cleanContact(rawInput, { required = true } = {}) {
+  // null, strings, arrays etc. are treated as "no details given" (→ 422 when required), never a crash.
+  const input = rawInput && typeof rawInput === 'object' && !Array.isArray(rawInput) ? rawInput : {};
   const contact = {
     name: cleanText(input.name, 120),
     company: cleanText(input.company, 160),
