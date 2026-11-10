@@ -29,7 +29,7 @@ function DesktopNav() {
   const spring = { type: 'spring', stiffness: 380, damping: 30, mass: 0.8 };
 
   return (
-    <nav aria-label="Primary" className="hidden items-center md:flex" onMouseLeave={() => setHovered(null)}>
+    <nav aria-label="Primary" className="hidden items-center lg:flex" onMouseLeave={() => setHovered(null)}>
       <motion.ul
         className="relative flex items-center gap-1 p-1"
         initial="hidden"
@@ -67,7 +67,7 @@ function DesktopNav() {
                 onFocus={() => setHovered(l.to)}
                 aria-current={on ? 'page' : undefined}
                 className={cn(
-                  'group relative z-10 block rounded-full px-4 py-1.5 text-center text-[13.5px] font-medium no-underline transition-colors duration-200',
+                  'group relative z-10 block rounded-full px-4 py-1.5 text-center text-[13.5px] font-medium whitespace-nowrap no-underline transition-colors duration-200',
                   on || hovered === l.to ? 'text-white' : 'text-white/65'
                 )}
               >
@@ -101,7 +101,7 @@ const MobileNav = lazy(() => import('./MobileNav'));
 function MenuButton() {
   const setMenuOpen = useUiStore((s) => s.setMenuOpen);
   return (
-    <Button variant="outline-light" size="icon" className="md:hidden" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
+    <Button variant="outline-light" size="icon" className="lg:hidden" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
       <Menu className="size-5" />
     </Button>
   );
@@ -158,7 +158,7 @@ export default function Header() {
         <Brand />
         <DesktopNav />
         <div className="flex items-center gap-2">
-          <Button asChild variant="spark" size="sm" className="hidden md:inline-flex">
+          <Button asChild variant="spark" size="sm" className="hidden lg:inline-flex">
             <Link to="/discovery">Find your solution</Link>
           </Button>
           <LazyMobileNav />

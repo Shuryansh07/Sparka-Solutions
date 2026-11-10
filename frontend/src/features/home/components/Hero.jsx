@@ -99,18 +99,19 @@ export default function Hero() {
           </motion.p>
 
           <motion.div
-            className="flex flex-wrap gap-3"
+            className="grid gap-3 sm:flex sm:flex-wrap"
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45, duration: 0.7, ease }}
           >
-            <Button asChild variant="spark" size="lg" className="group">
+            {/* Full-width, equal buttons when stacked on phones; natural width side by side above. */}
+            <Button asChild variant="spark" size="lg" className="group w-full sm:w-auto">
               <Link to="/discovery">
                 Find your solution
                 <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </Button>
-            <Button asChild variant="outline-light" size="lg">
+            <Button asChild variant="outline-light" size="lg" className="w-full sm:w-auto">
               <Link to="/#how">See how it works</Link>
             </Button>
           </motion.div>

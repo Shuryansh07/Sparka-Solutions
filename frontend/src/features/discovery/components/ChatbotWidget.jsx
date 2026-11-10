@@ -93,7 +93,7 @@ export default function ChatbotWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.97, transition: { duration: 0.15 } }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed right-4 bottom-24 z-50 flex h-[min(620px,calc(100dvh-8rem))] w-[min(400px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border bg-background shadow-2xl"
+            className="fixed right-3 bottom-20 z-50 flex h-[min(620px,calc(100dvh-7rem))] sm:right-4 sm:bottom-24 sm:h-[min(620px,calc(100dvh-8rem))] w-[min(400px,calc(100vw-1.5rem))] sm:w-[min(400px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border bg-background shadow-2xl"
           >
             {assistantEnabled === null ? (
               <div className="grid flex-1 place-items-center text-sm text-muted-foreground" aria-busy="true">
@@ -120,7 +120,7 @@ export default function ChatbotWidget() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 12, scale: 0.9, transition: { duration: 0.2 } }}
             transition={{ type: 'spring', stiffness: 380, damping: 26 }}
-            className="fixed right-24 bottom-7 z-50 rounded-2xl rounded-br-sm border bg-background px-4 py-2.5 text-sm font-medium whitespace-nowrap text-foreground shadow-lg"
+            className="fixed right-20 bottom-5 z-50 rounded-2xl sm:right-24 sm:bottom-7 rounded-br-sm border bg-background px-4 py-2.5 text-sm font-medium whitespace-nowrap text-foreground shadow-lg"
           >
             How may I help you?
           </motion.button>
@@ -138,7 +138,7 @@ export default function ChatbotWidget() {
         whileHover={{ scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
         transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-        className="fixed right-4 bottom-4 z-50 grid size-16 place-items-center rounded-full bg-primary text-white shadow-[0_12px_30px_-8px_var(--primary)] outline-none focus-visible:ring-4 focus-visible:ring-ring/40"
+        className="fixed right-3 bottom-3 z-50 grid size-14 place-items-center sm:right-4 sm:bottom-4 sm:size-16 rounded-full bg-primary text-white shadow-[0_12px_30px_-8px_var(--primary)] outline-none focus-visible:ring-4 focus-visible:ring-ring/40"
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
@@ -148,7 +148,7 @@ export default function ChatbotWidget() {
             exit={{ rotate: 90, opacity: 0 }}
             transition={{ duration: 0.15 }}
           >
-            {open ? <X className="size-7" /> : <MessageCircle className="size-7" />}
+            {open ? <X className="size-6 sm:size-7" /> : <MessageCircle className="size-6 sm:size-7" />}
           </motion.span>
         </AnimatePresence>
         {!open && (
