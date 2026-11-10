@@ -142,3 +142,17 @@ test('a failed response event becomes an error event', async () => {
     console.error = original;
   }
 });
+
+test('encrypted reasoning can be switched off for non-reasoning models', async () => {
+  assert.equal(chatConfig({ OPENAI_API_KEY: 'k', CHAT_MODEL: 'm' }).encryptedReasoning, true);
+  assert.equal(chatConfig({ OPENAI_API_KEY: 'k', CHAT_MODEL: 'm', CHAT_ENCRYPTED_REASONING: 'false' }).encryptedReasoning, false);
+  const client = fakeOpenAI([textEvents('ok')]);
+  setOpenAIForTests(client);
+  config.chat.encryptedReasoning = false;
+  try {
+    await (await ask()).text();
+    assert.equal('include' in client.calls[0], false);
+  } finally {
+    config.chat.encryptedReasoning = true;
+  }
+});

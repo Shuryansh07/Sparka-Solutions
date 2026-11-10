@@ -65,7 +65,7 @@ Without Zoho credentials, submissions are stored in `backend/.data/store.json` a
 
 The chat widget's **Ask a question** mode is an AI assistant that searches the product catalog and hands interested visitors to a representative (it creates a normal submission with route `chat`, so the CRM Lead, Note and rep Task work as for the other paths). The **Guided questions** mode is the scripted Discovery chat and is also the fallback whenever the assistant is unavailable.
 
-- **Powered by** OpenAI's Responses API with `store: false` (chats are not kept on OpenAI's side). Set `OPENAI_API_KEY` and `CHAT_MODEL` (an OpenAI model ID from your account's model list). Chat stays off until both are set; `CHAT_ENABLED=false` switches it off. To change model, change `CHAT_MODEL` and restart.
+- **Powered by** OpenAI's Responses API with `store: false` (chats are not kept on OpenAI's side). Set `OPENAI_API_KEY` and `CHAT_MODEL` (an OpenAI model ID from your account's model list). Chat stays off until both are set; `CHAT_ENABLED=false` switches it off. To change model, change `CHAT_MODEL` and restart; if a non-reasoning model rejects requests, set `CHAT_ENCRYPTED_REASONING=false`.
 - **No prices, by design.** Products have no price field and the assistant is instructed never to quote prices or estimates, matching the rule below.
 - **Limits:** 1,000 characters per message, the last 20 messages of history, 6 model calls per turn, 20 messages per 10 minutes per IP.
 - **Live check:** with the API running and your key set, `node backend/scripts/chat-smoke.mjs` asks five fixed questions (it calls the real model and costs a little) so you can check the answers by eye.

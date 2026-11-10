@@ -11,13 +11,16 @@ const VEHICLE_TYPES = library.questions.find((q) => q.id === 'vehicleTypes').opt
 // The approved categories: the "interests" options of the management-approved question library.
 export const CATEGORIES = library.questions.find((q) => q.id === 'interests').options;
 
+// Spec rows that could carry pricing are dropped too, not just a top-level price field.
+const PRICE_LIKE = /price|pricing|cost|msrp|discount/i;
+
 function cleanSpecs(input) {
   if (!input || typeof input !== 'object' || Array.isArray(input)) return {};
   const specs = {};
   for (const [key, value] of Object.entries(input).slice(0, 30)) {
     const k = cleanText(key, 80);
     const v = cleanText(typeof value === 'number' ? String(value) : value, 200);
-    if (k && v) specs[k] = v;
+    if (k && v && !PRICE_LIKE.test(k)) specs[k] = v;
   }
   return specs;
 }

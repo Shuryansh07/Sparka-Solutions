@@ -47,3 +47,16 @@ test('cleanProduct drops unknown vehicle types and lowercases tags', () => {
 test('cleanProduct keeps active false when given', () => {
   assert.equal(cleanProduct({ ...VALID, active: false }, CATEGORIES).active, false);
 });
+
+test('cleanProduct drops price-like spec keys and keeps the rest', () => {
+  const p = cleanProduct(
+    { ...VALID, specs: { Price: '$499', MSRP: '599', 'Unit cost': '300', 'Dealer discount': '10%', Channels: '2' } },
+    CATEGORIES
+  );
+  assert.deepEqual(p.specs, { Channels: '2' });
+});
+
+test('cleanProduct keeps technical specs that merely contain "rate"', () => {
+  const p = cleanProduct({ ...VALID, specs: { 'Update rate': 'Every 30 seconds', 'Frame rate': '30 fps' } }, CATEGORIES);
+  assert.deepEqual(p.specs, { 'Update rate': 'Every 30 seconds', 'Frame rate': '30 fps' });
+});

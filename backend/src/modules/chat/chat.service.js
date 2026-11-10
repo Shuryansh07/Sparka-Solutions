@@ -51,7 +51,8 @@ export async function runChat({ repo, messages, emit, signal }) {
         input,
         tools: tools.definitions,
         store: false, // chats may contain contact details: don't keep them on OpenAI's side
-        include: ['reasoning.encrypted_content'], // lets reasoning models continue statelessly
+        // Lets reasoning models continue statelessly; switchable for models that reject it.
+        ...(config.chat.encryptedReasoning ? { include: ['reasoning.encrypted_content'] } : {}),
         stream: true,
         max_output_tokens: 4000,
       },

@@ -20,7 +20,14 @@ const zoho = {
 export function chatConfig(env) {
   const apiKey = env.OPENAI_API_KEY || '';
   const model = env.CHAT_MODEL || '';
-  return { apiKey, model, enabled: env.CHAT_ENABLED !== 'false' && Boolean(apiKey && model) };
+  return {
+    apiKey,
+    model,
+    enabled: env.CHAT_ENABLED !== 'false' && Boolean(apiKey && model),
+    // Reasoning models need their encrypted reasoning passed back when store is false.
+    // Set CHAT_ENCRYPTED_REASONING=false if the chosen model rejects it.
+    encryptedReasoning: env.CHAT_ENCRYPTED_REASONING !== 'false',
+  };
 }
 
 export const config = {
