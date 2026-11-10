@@ -3,7 +3,7 @@ import { HttpError } from '../../core/http-error.js';
 import { cleanContact, cleanText } from '../../core/validation.js';
 import { library } from '../discovery/discovery.service.js';
 import { getProduct, searchProducts } from '../products/catalog.service.js';
-import { CATEGORIES } from '../products/products.validation.js';
+import { CATEGORIES, VEHICLE_TYPES } from '../products/products.validation.js';
 import { createSubmission } from '../submissions/submission.service.js';
 
 // OpenAI strict function tools: every property is required; optional ones are nullable.
@@ -24,7 +24,11 @@ const DEFINITIONS = [
     {
       query: nullable({ type: 'string', description: 'Keywords, e.g. "dash cam vans". Null if filtering only.' }),
       category: { type: ['string', 'null'], enum: [...CATEGORIES, null], description: 'Approved category, or null.' },
-      vehicleType: nullable({ type: 'string', description: 'Vehicle type the visitor mentioned, or null.' }),
+      vehicleType: {
+        type: ['string', 'null'],
+        enum: [...VEHICLE_TYPES, null],
+        description: 'The approved vehicle type closest to what the visitor described, or null if unclear.',
+      },
       limit: nullable({ type: 'integer', description: 'Max results, 1-10. Null for the default of 5.' }),
     }
   ),

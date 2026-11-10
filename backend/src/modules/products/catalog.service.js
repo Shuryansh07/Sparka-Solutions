@@ -20,6 +20,16 @@ async function activeProducts(repo) {
 
 const toSummary = ({ sku, name, brand, category, summary }) => ({ sku, name, brand, category, summary });
 
+// Vehicle types are matched loosely: "vans" should find "Light-duty vans / pickups".
+function fitsVehicle(product, vehicleType) {
+  const wanted = vehicleType.toLowerCase();
+  const words = wanted.split(/[^a-z0-9]+/).filter((w) => w.length >= 3);
+  return product.vehicleTypes.some((type) => {
+    const t = type.toLowerCase();
+    return t === wanted || words.some((w) => t.includes(w.replace(/s$/, '')));
+  });
+}
+
 function score(product, words) {
   const name = product.name.toLowerCase();
   const tags = product.tags.join(' ');
@@ -45,7 +55,7 @@ export async function searchProducts(repo, { query, category, vehicleType, limit
   const max = Math.min(Math.max(Number.isInteger(limit) ? limit : DEFAULT_LIMIT, 1), MAX_LIMIT);
   return (await activeProducts(repo))
     .filter((p) => !category || p.category === category)
-    .filter((p) => !vehicleType || p.vehicleTypes.includes(vehicleType))
+    .filter((p) => !vehicleType || fitsVehicle(p, vehicleType))
     .map((p) => ({ p, s: words.length ? score(p, words) : 1 }))
     .filter(({ s }) => s > 0)
     .sort((a, b) => b.s - a.s || a.p.name.localeCompare(b.p.name))

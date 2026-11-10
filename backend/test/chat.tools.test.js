@@ -107,3 +107,10 @@ test('request_follow_up creates a chat submission', async () => {
   assert.ok(submissions[0].heard[0].includes('Chat Assistant'));
   assert.deepEqual(events.at(-1), ['lead', { reference: out.reference }]);
 });
+
+test('search_products offers the approved vehicle types as an enum', async () => {
+  const { tools } = setup();
+  const { VEHICLE_TYPES } = await import('../src/modules/products/products.validation.js');
+  const search = tools.definitions.find((d) => d.name === 'search_products');
+  assert.deepEqual(search.parameters.properties.vehicleType.enum, [...VEHICLE_TYPES, null]);
+});

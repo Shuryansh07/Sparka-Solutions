@@ -88,3 +88,12 @@ test('getProduct returns null for unknown or inactive sku', async () => {
   assert.equal(await getProduct(repo, 'CAM-OLD'), null);
   assert.equal((await getProduct(repo, 'GPS-1')).name, 'Plug-in GPS tracker');
 });
+
+test('searchProducts matches a loose vehicle type like "vans"', async () => {
+  const products = [
+    p('CAM-VAN', 'Dual dash cam', { vehicleTypes: ['Light-duty vans / pickups'] }),
+    p('CAM-TRUCK', 'Truck dash cam', { vehicleTypes: ['Heavy-duty trucks'] }),
+  ];
+  const results = await searchProducts(fakeRepo(products), { query: 'dash cam', vehicleType: 'vans' });
+  assert.deepEqual(results.map((r) => r.sku), ['CAM-VAN']);
+});

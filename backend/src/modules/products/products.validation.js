@@ -7,7 +7,7 @@ const SKU = /^[A-Za-z0-9-]{2,64}$/;
 const library = JSON.parse(
   fs.readFileSync(new URL('../discovery/data/question-library.json', import.meta.url), 'utf8')
 );
-const VEHICLE_TYPES = library.questions.find((q) => q.id === 'vehicleTypes').options;
+export const VEHICLE_TYPES = library.questions.find((q) => q.id === 'vehicleTypes').options;
 // The approved categories: the "interests" options of the management-approved question library.
 export const CATEGORIES = library.questions.find((q) => q.id === 'interests').options;
 
