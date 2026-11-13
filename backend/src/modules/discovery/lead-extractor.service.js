@@ -88,6 +88,24 @@ export function leadFieldSpecs(library) {
   ];
 }
 
+// The person writing, for the "How can we reach you?" section (not the CRM interest fields).
+const contactField = (description) => ({ type: 'string', description });
+const CONTACT_SCHEMA = {
+  type: 'object',
+  description: 'Details the writer gives about themselves. Leave "" for anything they do not state.',
+  properties: {
+    name: contactField('Their own name, e.g. "Pat Lee" (not a driver or colleague they mention).'),
+    company: contactField('Their company or organization name.'),
+    email: contactField('Their email address, exactly as written.'),
+    phone: contactField('Their phone number, exactly as written.'),
+    location: contactField(
+      'Where they or their company are based, as "City, ST" with the 2-letter US state code, or the full state name if no city is given.'
+    ),
+  },
+  required: ['name', 'company', 'email', 'phone', 'location'],
+  additionalProperties: false,
+};
+
 // Strict structured-output schema: every field is required; "" or [] means "not mentioned".
 export function buildSchema(specs) {
   const properties = {};
@@ -101,7 +119,8 @@ export function buildSchema(specs) {
       properties[s.key] = { type: 'string', description };
     }
   }
-  return { type: 'object', properties, required: specs.map((s) => s.key), additionalProperties: false };
+  properties.contact = CONTACT_SCHEMA;
+  return { type: 'object', properties, required: [...specs.map((s) => s.key), 'contact'], additionalProperties: false };
 }
 
 const INSTRUCTIONS = [

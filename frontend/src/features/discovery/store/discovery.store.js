@@ -88,8 +88,14 @@ export const useDiscoveryStore = create(
       organizeNarrative: async () => {
         set({ busy: true, error: null });
         try {
-          const organized = await discoveryApi.organize(get().narrative);
-          set({ organized, describeStage: 'review', busy: false });
+          const { contact: found, ...organized } = await discoveryApi.organize(get().narrative);
+          // Details the customer gave about themselves fill "How can we reach you?", but never
+          // overwrite something they already typed there.
+          const contact = { ...get().contact };
+          for (const [key, value] of Object.entries(found || {})) {
+            if (value && key in contact && !String(contact[key] || '').trim()) contact[key] = value;
+          }
+          set({ organized, contact, describeStage: 'review', busy: false });
           return true;
         } catch (err) {
           set({ error: err.message, busy: false });

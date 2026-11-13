@@ -1,5 +1,5 @@
 import { HttpError } from '../../core/http-error.js';
-import { cleanText } from '../../core/validation.js';
+import { EMAIL, PHONE, cleanText } from '../../core/validation.js';
 
 export const ROUTES = ['guide', 'describe', 'talk'];
 const ANSWER_STATUSES = ['answered', 'unsure', 'skipped'];
@@ -51,6 +51,21 @@ export function cleanOrganized(rawInput, library) {
     mustHaves: cleanText(input.mustHaves, 4000),
     budget: cleanText(input.budget, 255),
     location: cleanText(input.location, 255),
+  };
+}
+
+// Contact details the organizer found in the customer's notes. Suggestions only: invalid
+// values are dropped instead of rejected, and the page fills only fields the customer left empty.
+export function cleanSuggestedContact(rawInput) {
+  const input = rawInput && typeof rawInput === 'object' && !Array.isArray(rawInput) ? rawInput : {};
+  const email = cleanText(input.email, 254).toLowerCase();
+  const phone = cleanText(input.phone, 25);
+  return {
+    name: cleanText(input.name, 120),
+    company: cleanText(input.company, 160),
+    email: EMAIL.test(email) ? email : '',
+    phone: PHONE.test(phone) ? phone : '',
+    location: cleanText(input.location, 160),
   };
 }
 

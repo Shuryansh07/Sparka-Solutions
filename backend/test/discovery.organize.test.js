@@ -132,3 +132,35 @@ test('installation chosen by its CRM label (older Describe page) still reaches t
   });
   assert.equal(fields.Installation_Preference, 'Please coordinate installation');
 });
+
+test('organizeText returns contact details the writer gave, dropping invalid ones', async () => {
+  const extract = async () => ({
+    ...AI_RESULT,
+    contact: { name: 'Pat Lee', company: 'Lee Plumbing', email: 'PAT@LEEPLUMBING.COM', phone: 'call me', location: 'Dallas, TX' },
+  });
+  const out = await organizeText(NOTES, { extract });
+  assert.deepEqual(out.contact, {
+    name: 'Pat Lee',
+    company: 'Lee Plumbing',
+    email: 'pat@leeplumbing.com',
+    phone: '',
+    location: 'Dallas, TX',
+  });
+  assert.equal(out.fleetSize, '25-99'); // Lead fields are unaffected
+});
+
+test('rule-based fallback still picks out an email and phone number', async () => {
+  const extract = async () => {
+    throw new Error('boom');
+  };
+  const out = await organizeText(`${NOTES} Reach me at pat@example.com or (214) 555-0182.`, { extract });
+  assert.equal(out.contact.email, 'pat@example.com');
+  assert.equal(out.contact.phone, '(214) 555-0182');
+  assert.equal(out.contact.name, '');
+});
+
+test('the AI schema asks for the writer\'s contact details', () => {
+  const schema = buildSchema(leadFieldSpecs(library));
+  assert.deepEqual(schema.properties.contact.required, ['name', 'company', 'email', 'phone', 'location']);
+  assert.equal(schema.properties.contact.additionalProperties, false);
+});

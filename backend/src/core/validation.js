@@ -1,7 +1,7 @@
 import { HttpError } from './http-error.js';
 
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const PHONE = /^[0-9+().\-\s]{7,25}$/;
+export const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+export const PHONE = /^[0-9+().\-\s]{7,25}$/;
 
 export const CONTACT_METHODS = ['phone', 'email', 'video'];
 
