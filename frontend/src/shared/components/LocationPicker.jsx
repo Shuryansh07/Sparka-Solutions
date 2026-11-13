@@ -1,9 +1,8 @@
 import { Plus, X } from 'lucide-react';
 import { useEffect, useId, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Combobox } from '@/components/ui/combobox';
 import { Label } from '@/components/ui/label';
-import { NativeSelect } from '@/components/ui/native-select';
 import { cn } from '@/lib/utils';
 import { US_STATES, formatLocation, joinLocations, parseLocation, splitLocations } from '@/shared/lib/us-locations';
 
@@ -25,64 +24,52 @@ function loadCities(code) {
 }
 
 function useCities(code) {
-  const [cities, setCities] = useState([]);
+  const [state, setState] = useState({ code: '', cities: [] });
   useEffect(() => {
     let live = true;
-    setCities([]);
-    if (code) loadCities(code).then((list) => live && setCities(list));
+    if (code) loadCities(code).then((cities) => live && setState({ code, cities }));
     return () => {
       live = false;
     };
   }, [code]);
-  return cities;
+  const ready = state.code === code;
+  return { cities: ready ? state.cities : [], loading: Boolean(code) && !ready };
 }
 
-/** State dropdown + city box with type-ahead suggestions for the chosen state. */
+const STATE_OPTIONS = US_STATES.map((s) => ({ value: s.code, label: s.name }));
+
+/** Searchable State and City dropdowns; the city list follows the chosen state. */
 function StateCityFields({ state, city, onChange, idPrefix, stacked }) {
-  const cities = useCities(state);
-  const listId = `${idPrefix}-cities`;
+  const { cities, loading } = useCities(state);
   return (
     <div className={cn('grid gap-3', !stacked && 'sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]')}>
-      <div className="grid gap-1.5">
-        <span className="sr-only" id={`${idPrefix}-state-label`}>
-          State
-        </span>
-        <NativeSelect
-          aria-labelledby={`${idPrefix}-state-label`}
-          value={state}
-          // Switching between states clears the city; picking a first state keeps a city typed before it.
-          onChange={(e) => onChange({ state: e.target.value, city: state && e.target.value !== state ? '' : city })}
-        >
-          <option value="">State</option>
-          {US_STATES.map((s) => (
-            <option key={s.code} value={s.code}>
-              {s.name}
-            </option>
-          ))}
-        </NativeSelect>
-      </div>
-      <div className="grid gap-1.5">
-        <span className="sr-only" id={`${idPrefix}-city-label`}>
-          City
-        </span>
-        <Input
-          aria-labelledby={`${idPrefix}-city-label`}
-          list={state ? listId : undefined}
-          className="h-11"
-          autoComplete="off"
-          maxLength={80}
-          placeholder={state ? 'City (start typing)' : 'Choose a state first, or type'}
-          value={city}
-          onChange={(e) => onChange({ state, city: e.target.value })}
-        />
-        {state && (
-          <datalist id={listId}>
-            {cities.map((c) => (
-              <option key={c} value={c} />
-            ))}
-          </datalist>
-        )}
-      </div>
+      <span className="sr-only" id={`${idPrefix}-state-label`}>
+        State
+      </span>
+      <Combobox
+        aria-labelledby={`${idPrefix}-state-label`}
+        options={STATE_OPTIONS}
+        value={state}
+        placeholder="State"
+        searchPlaceholder="Search states…"
+        emptyText="No state matches"
+        // Switching between states clears the city; picking a first state keeps a city typed before it.
+        onChange={(next) => onChange({ state: next, city: state && next !== state ? '' : city })}
+      />
+      <span className="sr-only" id={`${idPrefix}-city-label`}>
+        City
+      </span>
+      <Combobox
+        aria-labelledby={`${idPrefix}-city-label`}
+        options={cities}
+        value={city}
+        loading={loading}
+        allowCustom
+        placeholder={state ? 'City' : 'City (choose a state first)'}
+        searchPlaceholder={state ? 'Search cities…' : 'Type a place…'}
+        emptyText={state ? 'No city matches. Use what you typed below.' : 'Choose a state to see its cities.'}
+        onChange={(next) => onChange({ state, city: next.slice(0, 80) })}
+      />
     </div>
   );
 }
@@ -128,12 +115,13 @@ function MultiLocationPicker({ id, label, value, onChange, optional, stacked, hi
   const [draft, setDraft] = useState({ state: '', city: '' });
   const canAdd = Boolean(draft.state || draft.city.trim());
 
-  const add = () => {
-    const next = formatLocation(draft);
-    if (!next || items.includes(next)) return setDraft({ state: draft.state, city: '' });
-    onChange(joinLocations([...items, next]));
-    setDraft({ state: draft.state, city: '' }); // keep the state: the next city is often in the same one
+  const add = (entry = draft) => {
+    const next = formatLocation(entry);
+    if (next && !items.includes(next)) onChange(joinLocations([...items, next]));
+    setDraft({ state: entry.state, city: '' }); // keep the state: the next city is often in the same one
   };
+  // Choosing a city adds it right away; "Add" with no city adds the whole state.
+  const onDraftChange = (next) => (next.city && next.city !== draft.city ? add(next) : setDraft(next));
   const remove = (item) => onChange(joinLocations(items.filter((i) => i !== item)));
 
   return (
@@ -161,22 +149,14 @@ function MultiLocationPicker({ id, label, value, onChange, optional, stacked, hi
         </ul>
       )}
 
-      <div
-        className={cn('grid gap-3', !stacked && 'sm:grid-cols-[minmax(0,1fr)_auto]')}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
-            e.preventDefault(); // add the location instead of submitting the form
-            if (canAdd) add();
-          }
-        }}
-      >
-        <StateCityFields idPrefix={id} stacked={stacked} state={draft.state} city={draft.city} onChange={setDraft} />
-        <Button type="button" variant="outline" className="h-11" disabled={!canAdd} onClick={add}>
+      <div className={cn('grid gap-3', !stacked && 'sm:grid-cols-[minmax(0,1fr)_auto]')}>
+        <StateCityFields idPrefix={id} stacked={stacked} state={draft.state} city={draft.city} onChange={onDraftChange} />
+        <Button type="button" variant="outline" className="h-11" disabled={!canAdd} onClick={() => add()}>
           <Plus /> Add
         </Button>
       </div>
       <span className="text-[13px] text-muted-foreground">
-        {hint || 'Pick a state, then a city (leave the city empty for statewide). Add as many as you need.'}
+        {hint || 'Pick a state, then a city to add it. To add a whole state, pick it and press Add.'}
       </span>
     </div>
   );
