@@ -1,18 +1,33 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { CATEGORIES, cleanProduct } from '../modules/products/products.validation.js';
 
-const dataDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../.data');
-const dataFile = path.join(dataDir, 'store.json');
+// STORE_FILE lets tests point the store at a temp file.
+const dataFile =
+  process.env.STORE_FILE || path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../.data'), 'store.json');
+const dataDir = path.dirname(dataFile);
+const seedFile = new URL('../modules/products/data/products.seed.json', import.meta.url);
 
 const state = load();
 
 function load() {
   try {
-    return JSON.parse(fs.readFileSync(dataFile, 'utf8'));
+    return { products: {}, ...JSON.parse(fs.readFileSync(dataFile, 'utf8')) };
   } catch {
-    return { drafts: {}, submissions: {} };
+    return { drafts: {}, submissions: {}, products: {} };
   }
+}
+
+// Dev convenience: an empty catalog is filled once from the placeholder seed file.
+function ensureSeeded() {
+  if (Object.keys(state.products).length) return;
+  const { products } = JSON.parse(fs.readFileSync(seedFile, 'utf8'));
+  for (const raw of products) {
+    const product = cleanProduct(raw, CATEGORIES);
+    state.products[product.sku] = product;
+  }
+  persist();
 }
 
 function persist() {
@@ -21,6 +36,24 @@ function persist() {
 }
 
 export const memoryRepository = {
+  async listProducts() {
+    ensureSeeded();
+    return Object.values(state.products);
+  },
+
+  async upsertProducts(products) {
+    ensureSeeded();
+    let inserted = 0;
+    let updated = 0;
+    for (const product of products) {
+      if (state.products[product.sku]) updated++;
+      else inserted++;
+      state.products[product.sku] = product;
+    }
+    persist();
+    return { inserted, updated };
+  },
+
   async createDraft(draft) {
     state.drafts[draft.token] = draft;
     persist();

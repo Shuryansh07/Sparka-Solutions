@@ -2,7 +2,12 @@ import crypto from 'node:crypto';
 import { syncSubmissionToCrm } from '../../integrations/zoho-crm/crm.service.js';
 import { HttpError } from '../../core/http-error.js';
 
-const ROUTE_LABEL = { guide: 'Guide Me', describe: "I'll Tell You What I Need", talk: "Let's Talk" };
+const ROUTE_LABEL = {
+  guide: 'Guide Me',
+  describe: "I'll Tell You What I Need",
+  talk: "Let's Talk",
+  chat: 'Chat Assistant',
+};
 
 function newReference() {
   return `SPK-${crypto.randomBytes(3).toString('hex').toUpperCase()}`;
@@ -15,7 +20,7 @@ function formatValue(answer) {
 }
 
 // Plain-text recap shared by the confirmation screen and the CRM note.
-export function buildHeard({ route, answers = {}, narrative, organized, talk, contact, readiness }, library) {
+export function buildHeard({ route, answers = {}, narrative, organized, talk, chat, contact, readiness }, library) {
   const lines = [`Route: ${ROUTE_LABEL[route]}`];
   if (readiness) lines.push(`Readiness: ${readiness}`);
 
@@ -30,6 +35,10 @@ export function buildHeard({ route, answers = {}, narrative, organized, talk, co
     if (organized?.fleetSize) lines.push(`Fleet size: ${organized.fleetSize}`);
     if (organized?.timing) lines.push(`Timing: ${organized.timing}`);
     if (organized?.installation) lines.push(`Installation: ${organized.installation}`);
+  }
+  if (route === 'chat') {
+    if (chat?.summary) lines.push(`Summary: ${chat.summary}`);
+    if (chat?.skus?.length) lines.push(`Products discussed: ${chat.skus.join(', ')}`);
   }
   if (route === 'talk') {
     if (talk?.method) lines.push(`Preferred: ${talk.method}`);

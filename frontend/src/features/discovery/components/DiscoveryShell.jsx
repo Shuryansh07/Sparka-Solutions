@@ -2,11 +2,9 @@ import { Headset, Lock, ShieldCheck } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import PageHero from '@/shared/components/PageHero';
 import { useDiscoveryStore } from '../store/discovery.store';
 import PathSwitcher from './PathSwitcher';
-import SaveForLater from './SaveForLater';
 
 export default function DiscoveryShell({ route, title, intro, children }) {
   const clearError = useDiscoveryStore((s) => s.clearError);
@@ -40,16 +38,6 @@ export default function DiscoveryShell({ route, title, intro, children }) {
                   <Link to="/discovery/talk">Talk to a person</Link>
                 </Button>
               </div>
-            )}
-
-            {route !== 'talk' && (
-              <Card className="gap-0 p-6">
-                <h3 className="text-lg font-bold">Not ready to finish?</h3>
-                <p className="mt-1.5 mb-4 text-sm leading-relaxed text-muted-foreground">
-                  Your answers are kept on this device. Save a link to resume anywhere.
-                </p>
-                <SaveForLater route={route} />
-              </Card>
             )}
 
             <ul className="grid gap-3 px-1 text-[13px] leading-relaxed text-muted-foreground">

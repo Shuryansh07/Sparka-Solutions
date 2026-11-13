@@ -2,10 +2,14 @@ import { Router } from 'express';
 import { asyncHandler } from '../../core/http-error.js';
 import { requireAdminKey } from '../../core/middleware/admin-auth.js';
 import { retryCrmSync } from '../submissions/submission.service.js';
+import { importJson, importProducts, listAllProducts } from './products.admin.js';
 
 const router = Router();
 
 router.use(requireAdminKey);
+
+router.get('/products', listAllProducts);
+router.post('/products/import', importJson, importProducts);
 
 // Surfaces failed CRM syncs so staff can see and retry them instead of losing leads silently.
 router.get(

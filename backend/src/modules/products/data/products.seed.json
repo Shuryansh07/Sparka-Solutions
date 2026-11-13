@@ -1,0 +1,148 @@
+{
+  "_note": "Placeholder catalog for development. Replace with real products via the admin import.",
+  "products": [
+    {
+      "sku": "CAM-DUAL-200",
+      "name": "Dual-facing dash cam",
+      "brand": "Sample Brand A",
+      "category": "Cameras & Safety",
+      "summary": "Forward road camera plus driver-facing cabin camera with event recording.",
+      "description": "Records the road ahead and the cab at 1080p. Hard braking and collisions save a clip automatically. Cloud upload over LTE for fleet review.",
+      "specs": { "Channels": "2", "Resolution": "1080p", "Connectivity": "LTE + Wi-Fi", "Storage": "microSD up to 256 GB" },
+      "vehicleTypes": ["Light-duty vans / pickups", "Medium-duty trucks", "Passenger / transit"],
+      "tags": ["dash cam", "dashcam", "driver facing", "claims", "video telematics"]
+    },
+    {
+      "sku": "CAM-AI-400",
+      "name": "AI driver safety camera",
+      "brand": "Sample Brand B",
+      "category": "Cameras & Safety",
+      "summary": "Camera with in-cab alerts for distraction, tailgating and phone use.",
+      "description": "On-device AI detects distracted driving, following too closely and phone use, and coaches the driver with audio alerts. Events sync to a fleet dashboard.",
+      "specs": { "Channels": "2", "AI alerts": "Distraction, tailgating, phone use, seatbelt", "Connectivity": "LTE" },
+      "vehicleTypes": ["Light-duty vans / pickups", "Medium-duty trucks", "Heavy-duty trucks"],
+      "tags": ["adas", "driver coaching", "dash cam", "safety"]
+    },
+    {
+      "sku": "CAM-BACKUP-4CH",
+      "name": "4-channel backup and side camera system",
+      "brand": "Sample Brand C",
+      "category": "Cameras & Safety",
+      "summary": "Rear and side cameras with an in-cab monitor to remove blind spots.",
+      "description": "Four weatherproof cameras with a 7-inch quad-view monitor. Reverse trigger switches the rear view to full screen.",
+      "specs": { "Channels": "4", "Monitor": "7 in quad view", "Rating": "IP69K" },
+      "vehicleTypes": ["Medium-duty trucks", "Heavy-duty trucks", "Specialty / service vehicles"],
+      "tags": ["backup camera", "blind spot", "rear camera", "monitor"]
+    },
+    {
+      "sku": "GPS-PLUG-100",
+      "name": "Plug-in GPS tracker",
+      "brand": "Sample Brand D",
+      "category": "GPS & Telematics",
+      "summary": "OBD-II plug-in tracker for live location, trips and engine diagnostics.",
+      "description": "Installs in minutes in the OBD-II port. Live map, trip history, idle time, harsh driving and fault codes. Open API for dispatch and routing software.",
+      "specs": { "Install": "OBD-II plug-in", "Update rate": "Every 30 seconds", "Integrations": "REST API" },
+      "vehicleTypes": ["Light-duty vans / pickups", "Passenger / transit"],
+      "tags": ["gps", "tracking", "telematics", "obd", "dispatch integration"]
+    },
+    {
+      "sku": "GPS-ELD-300",
+      "name": "ELD and hours-of-service telematics unit",
+      "brand": "Sample Brand E",
+      "category": "GPS & Telematics",
+      "summary": "Hard-wired ELD with hours of service, DVIR and fuel reporting.",
+      "description": "Compliant electronic logging device with driver app for hours of service and inspections. Also reports location, fuel use and engine data.",
+      "specs": { "Install": "J1939 / hard-wired", "Compliance": "ELD, HOS, DVIR", "Driver app": "iOS and Android" },
+      "vehicleTypes": ["Medium-duty trucks", "Heavy-duty trucks"],
+      "tags": ["eld", "hours of service", "hos", "fuel", "compliance", "gps"]
+    },
+    {
+      "sku": "GPS-ASSET-50",
+      "name": "Battery-powered asset tracker",
+      "brand": "Sample Brand D",
+      "category": "GPS & Telematics",
+      "summary": "Wireless tracker for trailers and equipment with multi-year battery.",
+      "description": "No wiring needed. Reports location a few times a day to locate trailers, generators and equipment. Geofence alerts when assets move.",
+      "specs": { "Power": "Internal battery, up to 5 years", "Rating": "IP67" },
+      "vehicleTypes": ["Trailers", "Equipment / off-road"],
+      "tags": ["asset tracking", "trailer tracking", "geofence", "gps"]
+    },
+    {
+      "sku": "RACK-VAN-SHELF",
+      "name": "Modular van shelving system",
+      "brand": "Sample Brand F",
+      "category": "Racks & Storage",
+      "summary": "Lightweight aluminum shelves, bins and drawers for cargo vans.",
+      "description": "Configurable shelving with dividers, parts bins and lockable drawers. Bolts to factory mounting points.",
+      "specs": { "Material": "Aluminum", "Fits": "Full-size cargo vans" },
+      "vehicleTypes": ["Light-duty vans / pickups"],
+      "tags": ["shelving", "van shelves", "bins", "drawers", "storage"]
+    },
+    {
+      "sku": "RACK-LADDER-DROP",
+      "name": "Drop-down ladder rack",
+      "brand": "Sample Brand F",
+      "category": "Racks & Storage",
+      "summary": "Ladder rack that lowers to shoulder height for safer loading.",
+      "description": "Gas-assisted drop-down rack reduces roof climbing and back strain. Holds up to two extension ladders.",
+      "specs": { "Capacity": "2 ladders", "Mechanism": "Gas-assisted" },
+      "vehicleTypes": ["Light-duty vans / pickups"],
+      "tags": ["ladder rack", "roof rack", "ladder"]
+    },
+    {
+      "sku": "LIGHT-LED-BEACON",
+      "name": "LED warning beacon",
+      "brand": "Sample Brand G",
+      "category": "Lighting & Electrical",
+      "summary": "Magnetic or permanent-mount amber LED beacon with multiple flash patterns.",
+      "description": "Bright amber LED beacon for service and utility vehicles. Several flash patterns, low power draw.",
+      "specs": { "Color": "Amber", "Mount": "Magnetic or permanent", "Voltage": "12-24 V" },
+      "vehicleTypes": ["Light-duty vans / pickups", "Medium-duty trucks", "Specialty / service vehicles"],
+      "tags": ["beacon", "strobe", "warning light", "led"]
+    },
+    {
+      "sku": "PWR-INV-2000",
+      "name": "2000 W pure sine inverter kit",
+      "brand": "Sample Brand H",
+      "category": "Power & Charging",
+      "summary": "Runs power tools and laptops from the vehicle battery.",
+      "description": "Pure sine wave inverter with remote switch and install kit. Low-voltage cutoff protects the starting battery.",
+      "specs": { "Output": "2000 W continuous", "Waveform": "Pure sine" },
+      "vehicleTypes": ["Light-duty vans / pickups", "Medium-duty trucks"],
+      "tags": ["inverter", "power", "tools", "battery"]
+    },
+    {
+      "sku": "SEC-IMMOB-10",
+      "name": "Vehicle immobilizer and alarm",
+      "brand": "Sample Brand I",
+      "category": "Security & Access",
+      "summary": "Prevents engine start without a driver key fob; alarm on forced entry.",
+      "description": "Theft deterrent with driver ID fobs, siren and tamper alerts. Can integrate with telematics for remote notifications.",
+      "specs": { "Driver ID": "Key fob", "Alerts": "Siren + telematics" },
+      "vehicleTypes": ["Light-duty vans / pickups", "Medium-duty trucks", "Heavy-duty trucks"],
+      "tags": ["immobilizer", "alarm", "theft", "security"]
+    },
+    {
+      "sku": "COMM-PTT-RADIO",
+      "name": "Push-to-talk over cellular radio",
+      "brand": "Sample Brand J",
+      "category": "Communications",
+      "summary": "Nationwide two-way radio over LTE with group and private calls.",
+      "description": "Mobile PTT radio that works anywhere with cellular coverage. Group calls, private calls and dispatcher console.",
+      "specs": { "Network": "LTE", "Features": "Group calls, private calls, GPS location" },
+      "vehicleTypes": ["Light-duty vans / pickups", "Medium-duty trucks", "Passenger / transit"],
+      "tags": ["radio", "push-to-talk", "ptt", "two-way", "dispatch"]
+    },
+    {
+      "sku": "UPFIT-SERVICE-BODY",
+      "name": "Service body upfit package",
+      "brand": "Sample Brand K",
+      "category": "Vehicle Upfitting",
+      "summary": "Utility service body with compartments, lighting and power coordinated as one upfit.",
+      "description": "Coordinated upfit of a service body with compartment lighting, inverter and racks, installed through qualified upfitters.",
+      "specs": { "Body": "Steel or aluminum service body", "Includes": "Compartments, lighting, power" },
+      "vehicleTypes": ["Light-duty vans / pickups", "Medium-duty trucks"],
+      "tags": ["upfit", "service body", "utility body", "buildout"]
+    }
+  ]
+}

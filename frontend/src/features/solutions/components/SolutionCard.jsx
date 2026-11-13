@@ -2,14 +2,14 @@ import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { RevealItem } from '@/shared/components/Reveal';
 
-// One cell of the hairline-divided category grid.
+// One card of the spaced category grid.
 export default function SolutionCard({ icon: Icon, title, text, examples, highlight, detailed = false }) {
   return (
     <RevealItem
       as="article"
       className={cn(
-        'group relative flex flex-col p-7 transition-colors duration-300 md:p-8',
-        highlight ? 'bg-night text-white' : 'bg-background hover:bg-steel'
+        'group relative flex flex-col rounded-3xl border p-7 transition-colors duration-300 md:p-8',
+        highlight ? 'border-night bg-night text-white' : 'bg-background hover:bg-steel'
       )}
     >
       <span

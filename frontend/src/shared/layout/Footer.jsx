@@ -34,8 +34,9 @@ export default function Footer() {
     <footer className="relative overflow-hidden bg-night text-sm text-white/60">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-spark/60 to-transparent" />
 
-      <div className="container-page grid gap-12 pt-16 pb-12 md:grid-cols-[1.5fr_repeat(3,minmax(0,1fr))] md:pt-20">
-        <div className="max-w-sm">
+      {/* Phones: brand on top, link columns two-up. Tablet and up: four columns. */}
+      <div className="container-page grid grid-cols-2 gap-x-6 gap-y-10 pt-16 pb-12 md:grid-cols-[1.5fr_repeat(3,minmax(0,1fr))] md:gap-12 md:pt-20">
+        <div className="col-span-2 max-w-sm md:col-span-1">
           <Brand />
           <p className="mt-5 font-display text-[15px] font-semibold text-white">{TAGLINE}</p>
           <p className="mt-2 leading-relaxed">
@@ -45,11 +46,15 @@ export default function Footer() {
 
         {COLUMNS.map((col) => (
           <div key={col.title}>
-            <h2 className="mb-4 font-sans text-[13px] font-semibold text-white">{col.title}</h2>
-            <ul className="grid gap-2.5">
+            <h2 className="mb-2 font-sans text-[13px] font-semibold text-white md:mb-4">{col.title}</h2>
+            <ul className="grid lg:gap-2.5">
               {col.links.map(([to, label]) => (
                 <li key={to}>
-                  <Link to={to} className="text-white/60 no-underline transition-colors hover:text-spark">
+                  {/* 44px tall touch target on phones and tablets; compact text links on desktop. */}
+                  <Link
+                    to={to}
+                    className="inline-flex min-h-11 items-center text-white/60 no-underline transition-colors hover:text-spark lg:min-h-0"
+                  >
                     {label}
                   </Link>
                 </li>

@@ -33,7 +33,9 @@ export function cleanAnswers(input, library) {
   return answers;
 }
 
-export function cleanOrganized(input = {}, library) {
+export function cleanOrganized(rawInput, library) {
+  // Optional suggestions: null or any non-object means "none".
+  const input = rawInput && typeof rawInput === 'object' && !Array.isArray(rawInput) ? rawInput : {};
   const interestOptions = library.questions.find((q) => q.id === 'interests').options;
   return {
     interests: Array.isArray(input.interests) ? input.interests.filter((i) => interestOptions.includes(i)) : [],
