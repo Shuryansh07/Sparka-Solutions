@@ -1,42 +1,9 @@
 import axios from 'axios';
 import { config } from '../../config/index.js';
+import { buildLeadFields } from './lead-fields.js';
+import { isWebformSuccess, toWebformBody } from './webform.js';
 
 const { zoho } = config;
-const accountsUrl = `https://accounts.zoho.${zoho.dc}/oauth/v2/token`;
-const crm = axios.create({ baseURL: `https://www.zohoapis.${zoho.dc}/crm/v8`, timeout: 15000 });
-
-let cachedToken = null;
-
-async function accessToken() {
-  if (cachedToken && cachedToken.expiresAt > Date.now() + 60_000) return cachedToken.value;
-  const { data } = await axios.post(accountsUrl, null, {
-    params: {
-      refresh_token: zoho.refreshToken,
-      client_id: zoho.clientId,
-      client_secret: zoho.clientSecret,
-      grant_type: 'refresh_token',
-    },
-    timeout: 15000,
-  });
-  if (!data.access_token) throw new Error(`Zoho OAuth failed: ${data.error || 'no access_token'}`);
-  cachedToken = { value: data.access_token, expiresAt: Date.now() + (data.expires_in || 3600) * 1000 };
-  return cachedToken.value;
-}
-
-async function call(method, url, body) {
-  const token = await accessToken();
-  const { data } = await crm.request({
-    method,
-    url,
-    data: body,
-    headers: { Authorization: `Zoho-oauthtoken ${token}` },
-  });
-  const result = data?.data?.[0];
-  if (result && result.status !== 'success') {
-    throw new Error(`Zoho CRM ${url}: ${result.code} ${result.message}`);
-  }
-  return result?.details;
-}
 
 function splitName(full) {
   const parts = full.trim().split(/\s+/);
@@ -44,63 +11,43 @@ function splitName(full) {
   return { First_Name: parts.slice(0, -1).join(' '), Last_Name: parts.at(-1) };
 }
 
-function dueDate(days) {
-  const d = new Date();
-  d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
-}
-
 const ROUTE_LABEL = { guide: 'Guide Me', describe: "I'll Tell You What I Need", talk: "Let's Talk", chat: 'Chat Assistant' };
 
+// Everything we know about the submission, keyed by Lead field API name.
+// Only the fields present on the webform (see webform.js) are actually sent.
+export function buildLeadRecord(submission) {
+  const { contact } = submission;
+  return {
+    ...splitName(contact.name),
+    Company: contact.company || `${contact.name} (individual)`,
+    Email: contact.email || undefined,
+    Phone: contact.phone || undefined,
+    Lead_Source: zoho.leadSource,
+    Description: `Sparka Discovery ${submission.reference} via ${ROUTE_LABEL[submission.route]}`,
+    ...buildLeadFields(submission),
+  };
+}
+
+// Creates the Lead through the Zoho Web-to-Lead form. The form does not return the new
+// Lead's ID, so leadId stays null; the Lead can be found by Discovery Reference once that
+// field is on the form.
 export async function syncSubmissionToCrm(submission) {
   if (!config.crmEnabled) return { status: 'skipped', leadId: null, error: null };
 
   try {
-    const { contact } = submission;
-    const leadBody = {
-      data: [
-        {
-          ...splitName(contact.name),
-          Company: contact.company || `${contact.name} (individual)`,
-          Email: contact.email || undefined,
-          Phone: contact.phone || undefined,
-          Lead_Source: zoho.leadSource,
-          Description: `Sparka Discovery ${submission.reference} via ${ROUTE_LABEL[submission.route]}`,
-        },
-      ],
-      ...(zoho.leadAssignmentRuleId ? { lar_id: zoho.leadAssignmentRuleId } : {}),
-      trigger: ['workflow', 'approval'],
-    };
-    const lead = await call('post', '/Leads', leadBody);
-
-    await call('post', `/Leads/${lead.id}/Notes`, {
-      data: [
-        {
-          Note_Title: `Discovery ${submission.reference} - ${ROUTE_LABEL[submission.route]}`,
-          Note_Content: submission.heard.join('\n'),
-        },
-      ],
+    const body = toWebformBody(buildLeadRecord(submission), zoho.webform);
+    const res = await axios.post(zoho.webform.url, body.toString(), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      maxRedirects: 0,
+      timeout: 15000,
+      validateStatus: () => true,
     });
-
-    await call('post', '/Tasks', {
-      data: [
-        {
-          Subject:
-            submission.route === 'talk'
-              ? `Consultation request ${submission.reference}: contact customer`
-              : `Discovery ${submission.reference}: call customer to recap before any estimate`,
-          Due_Date: dueDate(zoho.taskDueDays),
-          Priority: 'High',
-          What_Id: { id: lead.id },
-          $se_module: 'Leads',
-        },
-      ],
-    });
-
-    return { status: 'synced', leadId: lead.id, error: null };
+    if (!isWebformSuccess(res.status, res.data)) {
+      throw new Error(`Zoho webform HTTP ${res.status}: ${String(res.data).slice(0, 500)}`);
+    }
+    return { status: 'synced', leadId: null, error: null };
   } catch (err) {
-    const message = err.response?.data ? JSON.stringify(err.response.data) : err.message;
-    console.error(`[crm] sync failed for ${submission.reference}: ${message}`);
-    return { status: 'failed', leadId: null, error: message.slice(0, 2000) };
+    console.error(`[crm] webform post failed for ${submission.reference}: ${err.message}`);
+    return { status: 'failed', leadId: null, error: err.message.slice(0, 2000) };
   }
 }

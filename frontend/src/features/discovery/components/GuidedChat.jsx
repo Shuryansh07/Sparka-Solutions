@@ -37,7 +37,7 @@ function botText(step) {
     case 'offer':
       return {
         text: 'That’s enough for us to start researching.',
-        help: 'Want to add a few optional details, like timing, location, must-haves or budget? It takes about a minute.',
+        help: 'Want to add a few optional details, like timing, location, constraints or budget? It takes about a minute.',
       };
     case 'name':
       return { text: 'Great. What’s your name?', help: 'A representative will follow up personally.' };

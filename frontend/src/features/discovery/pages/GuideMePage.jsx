@@ -93,6 +93,7 @@ function LoadingCard({ children }) {
 export default function GuideMePage() {
   const navigate = useNavigate();
   const headingRef = useRef(null);
+  const cardRef = useRef(null);
   const prevIndex = useRef(0);
   const s = useDiscoveryStore();
   const { library, libraryError, loadLibrary, answers, extended, step, busy, error } = s;
@@ -144,9 +145,10 @@ export default function GuideMePage() {
           ? 'Almost done'
           : 'Final check';
 
+  // Keep the question card in view (just under the sticky header) instead of jumping to the page top.
   const go = (to) => {
     s.setStep(to);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const next = () => {
@@ -175,7 +177,7 @@ export default function GuideMePage() {
       title="Guide Me"
       intro="A few quick, adaptive questions, usually 3 to 5 and about 2–4 minutes. Skip anything you like."
     >
-      <Card className="gap-0 overflow-hidden">
+      <Card ref={cardRef} className="scroll-mt-24 gap-0 overflow-hidden">
         <div className="grid gap-3 border-b bg-steel/60 px-6 py-4 md:px-9">
           <div className="flex items-center justify-between text-sm">
             <span className="font-medium">{label}</span>
@@ -207,7 +209,7 @@ export default function GuideMePage() {
                   </motion.span>
                   <StepHeading
                     title="That’s enough for us to start researching."
-                    help="Want to add a few optional details, like timing, location, must-haves, constraints or budget? It takes about a minute and helps us come prepared. Totally up to you."
+                    help="Want to add a few optional details, like timing, location, constraints or budget? It takes about a minute and helps us come prepared. Totally up to you."
                   />
                   <div className="flex flex-wrap gap-3">
                     <Button type="button" variant="outline" size="lg" onClick={() => s.setExtended(true)}>

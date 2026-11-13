@@ -3,17 +3,17 @@ import SectionHeading from '@/shared/components/SectionHeading';
 
 const CARDS = [
   {
-    img: '/images/fleet-convoy.webp',
-    alt: 'A convoy of freight trucks on a highway under a golden sunset',
+    img: '/images/fleet-semis.webp',
+    alt: 'A row of eight semi-trucks parked side by side in a lot',
     kicker: 'Large and national fleets',
-    title: 'Support for operations at scale',
+    title: ['Support for', 'operations at scale'],
     text: 'Broad sourcing, multi-vehicle projects and coordinated solutions across locations.',
   },
   {
-    img: '/images/fleet-vans.webp',
-    alt: 'A row of white service vans parked and ready for the day',
+    img: '/images/fleet-pickups.webp',
+    alt: 'A small fleet of matching orange work pickups parked at a depot',
     kicker: 'Small and growing fleets',
-    title: 'Personal attention for every vehicle',
+    title: ['Personal attention', 'for every vehicle'],
     text: 'Practical solutions for local businesses, owner-operators and growing teams.',
   },
 ];
@@ -30,7 +30,7 @@ export default function FleetScale() {
           {CARDS.map((c) => (
             <RevealItem
               as="article"
-              key={c.title}
+              key={c.kicker}
               className="group relative isolate flex min-h-[380px] flex-col justify-end overflow-hidden rounded-3xl p-7 text-white md:min-h-[440px] md:p-9"
             >
               <img
@@ -43,7 +43,12 @@ export default function FleetScale() {
               />
               <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-t from-night via-night/70 to-night/5" />
               <span className="text-sm font-medium text-spark">{c.kicker}</span>
-              <h3 className="type-wide mt-2 text-2xl font-bold md:text-3xl">{c.title}</h3>
+              {/* Same two lines on both cards from tablet up; one flowing line on phones. */}
+              <h3 className="type-wide mt-2 text-2xl font-bold lg:text-3xl">
+                {c.title.map((line) => (
+                  <span key={line} className="md:block">{line} </span>
+                ))}
+              </h3>
               <p className="mt-2 max-w-md text-white/70">{c.text}</p>
             </RevealItem>
           ))}

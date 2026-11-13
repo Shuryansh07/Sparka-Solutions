@@ -6,7 +6,7 @@ import { after, before, test } from 'node:test';
 
 process.env.STORE_FILE = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'sparka-')), 'store.json');
 process.env.STORE_DRIVER = 'memory';
-for (const key of ['ZOHO_CLIENT_ID', 'ZOHO_CLIENT_SECRET', 'ZOHO_REFRESH_TOKEN']) process.env[key] = '';
+for (const key of ['ZOHO_WEBFORM_XNQSJSDP', 'ZOHO_WEBFORM_XMIWTLD']) process.env[key] = '';
 const { createApp } = await import('../src/app.js');
 
 let server;

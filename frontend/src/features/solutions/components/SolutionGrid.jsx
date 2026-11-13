@@ -6,7 +6,7 @@ export default function SolutionGrid({ detailed = false }) {
   return (
     <RevealGroup
       stagger={0.05}
-      className="grid gap-px overflow-hidden rounded-3xl border bg-border sm:grid-cols-2 lg:grid-cols-4"
+      className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
     >
       {SOLUTION_CATEGORIES.map((c) => (
         <SolutionCard key={c.title} {...c} detailed={detailed} />

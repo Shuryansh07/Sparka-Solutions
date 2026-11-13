@@ -9,7 +9,7 @@ process.env.STORE_FILE = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'sparka
 process.env.STORE_DRIVER = 'memory';
 process.env.OPENAI_API_KEY = 'test-key';
 process.env.CHAT_MODEL = 'test-model';
-for (const key of ['ZOHO_CLIENT_ID', 'ZOHO_CLIENT_SECRET', 'ZOHO_REFRESH_TOKEN']) process.env[key] = '';
+for (const key of ['ZOHO_WEBFORM_XNQSJSDP', 'ZOHO_WEBFORM_XMIWTLD']) process.env[key] = '';
 
 const { createApp } = await import('../src/app.js');
 const { config, chatConfig } = await import('../src/config/index.js');

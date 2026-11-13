@@ -1,0 +1,19 @@
+{
+  "command": "node src/server.js",
+  "build_path": "./",
+  "stack": "node20",
+  "env_variables": {
+    "NODE_ENV": "production",
+    "STORE_DRIVER": "catalyst",
+    "DRAFT_TTL_DAYS": "30",
+    "ZOHO_LEAD_SOURCE": "Website",
+    "OPENAI_API_KEY": "",
+    "CHAT_MODEL": "gpt-4o",
+    "CHAT_ENABLED": "true",
+    "CHAT_ENCRYPTED_REASONING": "true",
+    "ZOHO_WEBFORM_XNQSJSDP": "",
+    "ZOHO_WEBFORM_XMIWTLD": "",
+    "ZOHO_WEBFORM_RETURN_URL": "https://sparka-solution.onslate.com/"
+  },
+  "memory": 256
+}

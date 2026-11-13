@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { beforeEach, test } from 'node:test';
 
 // Never reach the real CRM from tests.
-for (const key of ['ZOHO_CLIENT_ID', 'ZOHO_CLIENT_SECRET', 'ZOHO_REFRESH_TOKEN']) process.env[key] = '';
+for (const key of ['ZOHO_WEBFORM_XNQSJSDP', 'ZOHO_WEBFORM_XMIWTLD']) process.env[key] = '';
 const { createChatTools } = await import('../src/modules/chat/chat.tools.js');
 const { invalidateCatalog } = await import('../src/modules/products/catalog.service.js');
 
