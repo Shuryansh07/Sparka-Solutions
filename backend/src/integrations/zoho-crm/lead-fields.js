@@ -58,7 +58,8 @@ export function buildLeadFields(submission) {
   const organized = submission.organized || {};
   const contact = submission.contact || {};
 
-  const mustHaves = [answered(answers, 'mustHaves'), answered(answers, 'constraints')].filter(Boolean);
+  // Guide answers win; on the describe path the AI organizer's suggestions (confirmed by the customer) fill in.
+  const mustHaves = [answered(answers, 'mustHaves') || organized.mustHaves, answered(answers, 'constraints')].filter(Boolean);
   const discoveryData = {
     ...(Object.keys(answers).length ? { answers } : {}),
     ...(route === 'describe' ? { organized } : {}),
@@ -72,15 +73,15 @@ export function buildLeadFields(submission) {
     Discovery_Status: STATUS[readiness],
     Research_Ready: readiness ? readiness === 'Research ready' : undefined,
     Fleet_Size: oneOf(answered(answers, 'fleetSize') ?? organized.fleetSize, FLEET_SIZES),
-    Vehicle_Types: someOf(answered(answers, 'vehicleTypes'), VEHICLE_TYPES),
+    Vehicle_Types: someOf(answered(answers, 'vehicleTypes') ?? organized.vehicleTypes, VEHICLE_TYPES),
     Areas_of_Interest: someOf(answered(answers, 'interests') ?? organized.interests, INTERESTS),
     Timing: oneOf(answered(answers, 'timing') ?? organized.timing, TIMINGS),
     Installation_Preference: INSTALLATION[answered(answers, 'installation') ?? organized.installation],
-    Current_Solution: oneOf(answered(answers, 'currentSolution'), CURRENT_SOLUTIONS),
-    Objective: text(answered(answers, 'objective'), TEXTAREA_MAX),
+    Current_Solution: oneOf(answered(answers, 'currentSolution') ?? organized.currentSolution, CURRENT_SOLUTIONS),
+    Objective: text(answered(answers, 'objective') || organized.objective, TEXTAREA_MAX),
     Must_Haves_and_Constraints: text(mustHaves.join('\n\n'), TEXTAREA_MAX),
-    Budget_Range: text(answered(answers, 'budget'), TEXT_MAX),
-    Vehicle_Location: text(answered(answers, 'geography') || contact.location, TEXT_MAX),
+    Budget_Range: text(answered(answers, 'budget') || organized.budget, TEXT_MAX),
+    Vehicle_Location: text(answered(answers, 'geography') || organized.location || contact.location, TEXT_MAX),
     Customer_Narrative: text(route === 'talk' ? talk?.topic : narrative, TEXTAREA_MAX),
     Preferred_Contact_Method: CONTACT_METHOD[talk?.method || contact.preferredContact],
     Best_Time_To_Reach: text(contact.bestTime, TEXT_MAX),

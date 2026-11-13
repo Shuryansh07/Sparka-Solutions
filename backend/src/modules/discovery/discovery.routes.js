@@ -6,7 +6,7 @@ import * as controller from './discovery.controller.js';
 const router = Router();
 
 router.get('/questions', controller.getQuestions);
-router.post('/organize', submitLimiter, controller.organize);
+router.post('/organize', submitLimiter, asyncHandler(controller.organize));
 router.post('/drafts', submitLimiter, asyncHandler(controller.createDraft));
 router.get('/drafts/:token', asyncHandler(controller.getDraft));
 router.put('/drafts/:token', submitLimiter, asyncHandler(controller.updateDraft));

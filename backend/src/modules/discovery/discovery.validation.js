@@ -36,12 +36,21 @@ export function cleanAnswers(input, library) {
 export function cleanOrganized(rawInput, library) {
   // Optional suggestions: null or any non-object means "none".
   const input = rawInput && typeof rawInput === 'object' && !Array.isArray(rawInput) ? rawInput : {};
-  const interestOptions = library.questions.find((q) => q.id === 'interests').options;
+  const options = (id) => library.questions.find((q) => q.id === id).options;
+  const someOf = (values, id) => (Array.isArray(values) ? values.filter((v) => options(id).includes(v)) : []);
+  const oneOf = (value, id) => (options(id).includes(value) ? value : '');
   return {
-    interests: Array.isArray(input.interests) ? input.interests.filter((i) => interestOptions.includes(i)) : [],
+    interests: someOf(input.interests, 'interests'),
     fleetSize: cleanText(input.fleetSize, 20),
     timing: cleanText(input.timing, 40),
     installation: cleanText(input.installation, 40),
+    // Extra Lead fields filled by the AI organizer (absent from older drafts).
+    vehicleTypes: someOf(input.vehicleTypes, 'vehicleTypes'),
+    currentSolution: oneOf(input.currentSolution, 'currentSolution'),
+    objective: cleanText(input.objective, 4000),
+    mustHaves: cleanText(input.mustHaves, 4000),
+    budget: cleanText(input.budget, 255),
+    location: cleanText(input.location, 255),
   };
 }
 

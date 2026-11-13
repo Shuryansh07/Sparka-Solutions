@@ -44,7 +44,8 @@ export default function DescribePage() {
   const navigate = useNavigate();
   const s = useDiscoveryStore();
   const { narrative, organized, describeStage, library, loadLibrary, busy, error } = s;
-  const interestOptions = library?.questions.find((q) => q.id === 'interests')?.options || [];
+  const optionsFor = (id) => library?.questions.find((q) => q.id === id)?.options || [];
+  const interestOptions = optionsFor('interests');
 
   useEffect(() => {
     loadLibrary();
@@ -129,6 +130,62 @@ export default function DescribePage() {
                     value={organized?.installation}
                     options={INSTALLATION}
                     onChange={(installation) => s.setOrganized({ installation })}
+                  />
+                </div>
+
+                <div className="grid gap-3">
+                  <Label asChild>
+                    <span>Vehicle types</span>
+                  </Label>
+                  <ChipGroup
+                    label="Vehicle types"
+                    options={optionsFor('vehicleTypes')}
+                    value={organized?.vehicleTypes || []}
+                    onChange={(vehicleTypes) => s.setOrganized({ vehicleTypes })}
+                  />
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-3">
+                  <Select
+                    label="Using something today?"
+                    value={organized?.currentSolution}
+                    options={optionsFor('currentSolution')}
+                    onChange={(currentSolution) => s.setOrganized({ currentSolution })}
+                  />
+                  <Field
+                    label="Where your vehicles operate"
+                    optional
+                    maxLength={255}
+                    value={organized?.location || ''}
+                    onChange={(e) => s.setOrganized({ location: e.target.value })}
+                  />
+                  <Field
+                    label="Budget"
+                    optional
+                    maxLength={255}
+                    value={organized?.budget || ''}
+                    onChange={(e) => s.setOrganized({ budget: e.target.value })}
+                  />
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <Field
+                    as="textarea"
+                    label="Goal"
+                    optional
+                    rows={3}
+                    maxLength={4000}
+                    value={organized?.objective || ''}
+                    onChange={(e) => s.setOrganized({ objective: e.target.value })}
+                  />
+                  <Field
+                    as="textarea"
+                    label="Must-haves & constraints"
+                    optional
+                    rows={3}
+                    maxLength={4000}
+                    value={organized?.mustHaves || ''}
+                    onChange={(e) => s.setOrganized({ mustHaves: e.target.value })}
                   />
                 </div>
 

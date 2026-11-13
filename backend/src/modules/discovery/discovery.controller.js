@@ -6,8 +6,8 @@ export const getQuestions = (_req, res) => {
   res.json({ version, maxQuestions, questions });
 };
 
-export const organize = (req, res) => {
-  res.json(discovery.organizeText(req.body?.text));
+export const organize = async (req, res) => {
+  res.json(await discovery.organizeText(req.body?.text));
 };
 
 export const createDraft = async (req, res) => {
