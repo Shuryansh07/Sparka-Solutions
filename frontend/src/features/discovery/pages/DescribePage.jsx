@@ -11,6 +11,7 @@ import Field from '@/shared/components/Field';
 import Notice from '@/shared/components/Notice';
 import ContactFields from '../components/ContactFields';
 import DiscoveryShell from '../components/DiscoveryShell';
+import VoiceButton from '../components/VoiceButton';
 import { FLEET_SIZES, INSTALLATION_IN_NOTES, TIMINGS, validateContact } from '../lib/flow';
 import { useDiscoveryStore } from '../store/discovery.store';
 
@@ -90,9 +91,17 @@ export default function DescribePage() {
                   <span className="text-[13px] text-muted-foreground tabular-nums">
                     {narrative.length > 0 && `${narrative.length.toLocaleString()} characters`}
                   </span>
-                  <Button type="submit" size="lg" disabled={busy || narrative.trim().length < 10}>
-                    {busy ? <Loader2 className="animate-spin" /> : <Sparkles />} Organize my notes
-                  </Button>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <VoiceButton
+                      busy={s.transcribing}
+                      disabled={busy}
+                      onRecorded={(audio) => s.transcribeAndOrganize(audio)}
+                      onError={(message) => s.setError(message)}
+                    />
+                    <Button type="submit" size="lg" disabled={busy || s.transcribing || narrative.trim().length < 10}>
+                      {busy ? <Loader2 className="animate-spin" /> : <Sparkles />} Organize my notes
+                    </Button>
+                  </div>
                 </div>
               </form>
             </Card>

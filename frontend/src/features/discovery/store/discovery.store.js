@@ -43,6 +43,7 @@ export const useDiscoveryStore = create(
       library: null,
       libraryError: null,
       busy: false,
+      transcribing: false,
       error: null,
       fieldErrors: {},
 
@@ -95,6 +96,23 @@ export const useDiscoveryStore = create(
           return false;
         }
       },
+
+      // Hold-to-talk: transcribe the recording, add it to the notes, then organize as usual.
+      transcribeAndOrganize: async (audio) => {
+        set({ transcribing: true, error: null });
+        let text;
+        try {
+          ({ text } = await discoveryApi.transcribe(audio));
+        } catch (err) {
+          set({ error: err.message, transcribing: false });
+          return false;
+        }
+        const current = get().narrative.trim();
+        set({ narrative: current ? `${current}\n\n${text}` : text, transcribing: false });
+        return get().organizeNarrative();
+      },
+
+      setError: (error) => set({ error }),
 
       saveDraft: async (route) => {
         set({ busy: true, error: null });

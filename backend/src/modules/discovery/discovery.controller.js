@@ -1,5 +1,6 @@
 import { publicReceipt } from '../submissions/submission.service.js';
 import * as discovery from './discovery.service.js';
+import { transcribeAudio } from './transcribe.service.js';
 
 export const getQuestions = (_req, res) => {
   const { version, maxQuestions, questions } = discovery.library;
@@ -8,6 +9,10 @@ export const getQuestions = (_req, res) => {
 
 export const organize = async (req, res) => {
   res.json(await discovery.organizeText(req.body?.text));
+};
+
+export const transcribe = async (req, res) => {
+  res.json(await transcribeAudio(req.body, req.headers['content-type']));
 };
 
 export const createDraft = async (req, res) => {

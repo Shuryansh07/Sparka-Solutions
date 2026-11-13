@@ -42,7 +42,8 @@ export function leadFieldSpecs(library) {
       crmField: 'Timing',
       kind: 'single',
       options: options('timing'),
-      guide: 'When they want a solution in place (next quarter -> "1-3 months").',
+      guide:
+        'When they want a solution in place: "asap"/"this week" -> "Immediately"; "this month"/"within a month"/"in the next few weeks" -> "Within 30 days"; "next quarter"/"in a couple of months" -> "1-3 months"; later -> "3+ months"; only researching -> "Just exploring".',
     },
     {
       key: 'installation',
@@ -56,7 +57,8 @@ export function leadFieldSpecs(library) {
       crmField: 'Current_Solution',
       kind: 'single',
       options: options('currentSolution'),
-      guide: 'Do they already use something for this need? "Partially" if it is outdated, disliked or covers only part of it.',
+      guide:
+        'Do they already use something for this need? "Yes" if it works, "Partially" if it is outdated, disliked or covers only part of it, "No" only if they say they have nothing. Leave "" if they do not mention what they use today.',
     },
     {
       key: 'objective',
