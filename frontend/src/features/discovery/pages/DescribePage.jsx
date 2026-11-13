@@ -11,7 +11,7 @@ import Field from '@/shared/components/Field';
 import Notice from '@/shared/components/Notice';
 import ContactFields from '../components/ContactFields';
 import DiscoveryShell from '../components/DiscoveryShell';
-import { FLEET_SIZES, INSTALLATION, TIMINGS, validateContact } from '../lib/flow';
+import { FLEET_SIZES, INSTALLATION_IN_NOTES, TIMINGS, validateContact } from '../lib/flow';
 import { useDiscoveryStore } from '../store/discovery.store';
 
 const stage = {
@@ -128,7 +128,7 @@ export default function DescribePage() {
                   <Select
                     label="Installation"
                     value={organized?.installation}
-                    options={INSTALLATION}
+                    options={[INSTALLATION_IN_NOTES, ...optionsFor('installation')]}
                     onChange={(installation) => s.setOrganized({ installation })}
                   />
                 </div>

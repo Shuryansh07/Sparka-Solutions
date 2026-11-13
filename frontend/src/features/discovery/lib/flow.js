@@ -6,12 +6,9 @@ export const ROUTES = {
 
 export const FLEET_SIZES = ['1-4', '5-24', '25-99', '100-499', '500+'];
 export const TIMINGS = ['Immediately', 'Within 30 days', '1-3 months', '3+ months', 'Just exploring'];
-export const INSTALLATION = [
-  'Mentioned in my notes',
-  'Please coordinate installation',
-  'We have our own installer',
-  'No installation needed',
-];
+// Extra installation choice for the describe path. The other choices come from the question
+// library, so they match what the backend maps onto the CRM Installation Preference field.
+export const INSTALLATION_IN_NOTES = 'Mentioned in my notes';
 
 const isVisible = (question, answers) => {
   if (!question.showIf) return true;

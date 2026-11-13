@@ -122,3 +122,13 @@ test('AI-organized values land in the matching CRM Lead fields', () => {
   assert.equal(fields.Customer_Narrative, NOTES);
   assert.equal(JSON.parse(fields.Discovery_Answers_JSON).organized.currentSolution, 'Partially');
 });
+
+test('installation chosen by its CRM label (older Describe page) still reaches the Lead', () => {
+  const fields = buildLeadFields({
+    route: 'describe',
+    narrative: NOTES,
+    organized: { installation: 'Please coordinate installation' },
+    contact: { name: 'Pat', email: 'pat@example.com' },
+  });
+  assert.equal(fields.Installation_Preference, 'Please coordinate installation');
+});

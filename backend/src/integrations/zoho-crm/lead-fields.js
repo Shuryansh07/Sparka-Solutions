@@ -11,6 +11,9 @@ const INSTALLATION = {
   'We have our own installer': 'We have our own installer',
   'No installation needed': 'No installation needed',
   'Mentioned in my notes': 'Mentioned in notes',
+  // CRM labels themselves (older Describe page versions sent these) map to themselves.
+  'Please coordinate installation': 'Please coordinate installation',
+  'Mentioned in notes': 'Mentioned in notes',
 };
 const FLEET_SIZES = ['1-4', '5-24', '25-99', '100-499', '500+'];
 const TIMINGS = ['Immediately', 'Within 30 days', '1-3 months', '3+ months', 'Just exploring'];
