@@ -8,6 +8,7 @@ import ChipGroup from '@/shared/components/ChipGroup';
 import { cn } from '@/lib/utils';
 import { buildGuideSteps, formatAnswer, validateContact } from '../lib/flow';
 import { useDiscoveryStore } from '../store/discovery.store';
+import DictationButton, { appendTranscript } from './DictationButton';
 
 // The scripted "Guide Me, as a chat" conversation: the approved Discovery questions, one per turn.
 // Rendered inside the chat panel owned by ChatbotWidget.
@@ -87,8 +88,9 @@ function BotMessage({ step }) {
   );
 }
 
-function TextComposer({ placeholder, multiline, initial = '', onSend, error, required = true, inputType = 'text' }) {
+function TextComposer({ placeholder, multiline, initial = '', onSend, error, required = true, inputType = 'text', voice = false }) {
   const [value, setValue] = useState(initial);
+  const [voiceError, setVoiceError] = useState(null);
   const ref = useRef(null);
   useEffect(() => ref.current?.focus(), []);
   const send = (e) => {
@@ -115,12 +117,23 @@ function TextComposer({ placeholder, multiline, initial = '', onSend, error, req
           }}
           className={cn(fieldBase, multiline ? 'max-h-32 min-h-11 resize-none py-2.5' : 'h-11')}
         />
+        {voice && (
+          <DictationButton
+            compact
+            onError={setVoiceError}
+            onText={(text) => {
+              // Fill the box rather than sending, so the answer can be checked first.
+              setValue((v) => appendTranscript(v, text, { multiline, maxLength: 4000 }));
+              ref.current?.focus();
+            }}
+          />
+        )}
         <Button type="submit" size="icon" className="size-11 shrink-0" disabled={required && !value.trim()}>
           <Send />
           <span className="sr-only">Send</span>
         </Button>
       </div>
-      {error && <p className="text-[13px] text-destructive">{error}</p>}
+      {(error || voiceError) && <p className="text-[13px] text-destructive">{error || voiceError}</p>}
     </form>
   );
 }
@@ -156,6 +169,7 @@ function QuestionComposer({ question, onAnswer, onMark }) {
       )}
       {(question.type === 'text' || question.type === 'textarea') && (
         <TextComposer
+          voice
           multiline={question.type === 'textarea'}
           placeholder={question.placeholder}
           initial={typeof initial === 'string' ? initial : ''}

@@ -19,8 +19,9 @@ const clock = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 /**
  * Hold-to-talk button. Records while pressed (pointer or Space/Enter), then hands the audio
  * Blob to onRecorded. `busy` shows the transcribing state; errors go to onError.
+ * `compact` renders a 44px mic button (for chat composers) that only shows the timer while recording.
  */
-export default function VoiceButton({ onRecorded, onError, busy = false, disabled = false }) {
+export default function VoiceButton({ onRecorded, onError, busy = false, disabled = false, compact = false, className }) {
   const [recording, setRecording] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const rec = useRef(null); // { recorder, stream, chunks, startedAt, timer }
@@ -107,11 +108,12 @@ export default function VoiceButton({ onRecorded, onError, busy = false, disable
   };
 
   const label = busy ? 'Transcribing…' : recording ? `Recording ${clock(seconds)} · release to send` : 'Hold to talk';
+  const compactLabel = recording ? clock(seconds) : null;
 
   return (
     <Button
       type="button"
-      size="lg"
+      size={compact ? 'default' : 'lg'}
       variant="outline"
       disabled={disabled || busy}
       aria-pressed={recording}
@@ -122,9 +124,12 @@ export default function VoiceButton({ onRecorded, onError, busy = false, disable
       onKeyDown={keyDown}
       onKeyUp={keyUp}
       onContextMenu={(e) => e.preventDefault()}
+      title={compact && !recording && !busy ? 'Hold to talk' : undefined}
       className={cn(
         'touch-none select-none',
-        recording && 'border-destructive bg-destructive/10 text-destructive hover:bg-destructive/10'
+        compact && 'h-11 min-w-11 shrink-0 gap-1.5 px-3 has-[>svg]:px-3',
+        recording && 'border-destructive bg-destructive/10 text-destructive hover:bg-destructive/10',
+        className
       )}
     >
       {busy ? (
@@ -135,7 +140,11 @@ export default function VoiceButton({ onRecorded, onError, busy = false, disable
           <Mic className="relative" />
         </span>
       )}
-      <span className="tabular-nums">{label}</span>
+      {compact ? (
+        compactLabel && <span className="tabular-nums">{compactLabel}</span>
+      ) : (
+        <span className="tabular-nums">{label}</span>
+      )}
     </Button>
   );
 }

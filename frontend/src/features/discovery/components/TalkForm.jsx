@@ -1,5 +1,6 @@
 import { Loader2, Mail, Phone, Send, Video } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -9,6 +10,9 @@ import Notice from '@/shared/components/Notice';
 import { validateContact } from '../lib/flow';
 import { useDiscoveryStore } from '../store/discovery.store';
 import ContactFields from './ContactFields';
+import DictationButton, { appendTranscript } from './DictationButton';
+
+const MAX_TOPIC = 2000;
 
 const METHODS = [
   { value: 'phone', label: 'Phone call', icon: Phone },
@@ -25,6 +29,7 @@ export default function TalkForm() {
   const submit = useDiscoveryStore((s) => s.submit);
   const busy = useDiscoveryStore((s) => s.busy);
   const error = useDiscoveryStore((s) => s.error);
+  const [voiceError, setVoiceError] = useState(null);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -74,15 +79,30 @@ export default function TalkForm() {
 
         <ContactFields showLocation={false} showBestTime />
 
-        <Field
-          as="textarea"
-          label="Anything you’d like us to know before we talk?"
-          optional
-          placeholder="Totally optional. We’re happy to start from scratch on the call."
-          value={talk.topic}
-          maxLength={2000}
-          onChange={(e) => setTalk({ topic: e.target.value })}
-        />
+        <div className="grid gap-3">
+          <Field
+            as="textarea"
+            label="Anything you’d like us to know before we talk?"
+            optional
+            placeholder="Totally optional. We’re happy to start from scratch on the call."
+            value={talk.topic}
+            maxLength={MAX_TOPIC}
+            onChange={(e) => setTalk({ topic: e.target.value })}
+          />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-[13px] text-muted-foreground" aria-live="polite">
+              {voiceError ? <span className="font-medium text-destructive">{voiceError}</span> : 'Prefer to talk? Hold the button and speak.'}
+            </p>
+            <DictationButton
+              disabled={busy}
+              onError={setVoiceError}
+              onText={(text) =>
+                // Read the latest notes: the user may have kept typing while we transcribed.
+                setTalk({ topic: appendTranscript(useDiscoveryStore.getState().talk.topic, text, { maxLength: MAX_TOPIC }) })
+              }
+            />
+          </div>
+        </div>
 
         {error && <Notice tone="error">{error}</Notice>}
 
