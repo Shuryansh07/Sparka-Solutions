@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import ChipGroup from '@/shared/components/ChipGroup';
 import Field from '@/shared/components/Field';
+import LocationPicker from '@/shared/components/LocationPicker';
 import Notice from '@/shared/components/Notice';
 import ContactFields from '../components/ContactFields';
 import DiscoveryShell from '../components/DiscoveryShell';
@@ -154,19 +155,12 @@ export default function DescribePage() {
                   />
                 </div>
 
-                <div className="grid gap-5 sm:grid-cols-3">
+                <div className="grid gap-5 sm:grid-cols-2">
                   <Select
                     label="Using something today?"
                     value={organized?.currentSolution}
                     options={optionsFor('currentSolution')}
                     onChange={(currentSolution) => s.setOrganized({ currentSolution })}
-                  />
-                  <Field
-                    label="Where your vehicles operate"
-                    optional
-                    maxLength={255}
-                    value={organized?.location || ''}
-                    onChange={(e) => s.setOrganized({ location: e.target.value })}
                   />
                   <Field
                     label="Budget"
@@ -176,6 +170,14 @@ export default function DescribePage() {
                     onChange={(e) => s.setOrganized({ budget: e.target.value })}
                   />
                 </div>
+
+                <LocationPicker
+                  multiple
+                  label="Where your vehicles operate"
+                  optional
+                  value={organized?.location || ''}
+                  onChange={(location) => s.setOrganized({ location: location.slice(0, 255) })}
+                />
 
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field

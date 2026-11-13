@@ -82,7 +82,8 @@ export function leadFieldSpecs(library) {
       key: 'location',
       crmField: 'Vehicle_Location',
       kind: 'text',
-      guide: 'Where the vehicles operate (city, region or state).',
+      guide:
+        'Where the vehicles operate. Format US places as "City, ST" with the 2-letter state code ("Dallas, TX"), or the full state name when no city is given ("Ohio"); add the state for a well-known city (Dallas -> "Dallas, TX"). Separate several places with "; ". Keep regions or non-US places as written ("Midwest").',
     },
   ];
 }

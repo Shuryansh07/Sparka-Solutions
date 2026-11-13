@@ -1,6 +1,7 @@
 import { Info } from 'lucide-react';
 import { useState } from 'react';
 import Field from '@/shared/components/Field';
+import LocationPicker from '@/shared/components/LocationPicker';
 import OptionGroup from '@/shared/components/OptionGroup';
 import { useDiscoveryStore } from '../store/discovery.store';
 import DictationButton, { appendTranscript } from './DictationButton';
@@ -39,7 +40,10 @@ export default function QuestionStep({ question }) {
           onChange={onChange}
         />
       )}
-      {(question.type === 'text' || question.type === 'textarea') && (
+      {question.id === 'geography' && (
+        <LocationPicker multiple label="Locations" value={typeof value === 'string' ? value : ''} onChange={onChange} />
+      )}
+      {(question.type === 'text' || question.type === 'textarea') && question.id !== 'geography' && (
         <div className="grid gap-3">
           <Field
             as={multiline ? 'textarea' : 'input'}

@@ -1,4 +1,5 @@
 import Field from '@/shared/components/Field';
+import LocationPicker from '@/shared/components/LocationPicker';
 import { useDiscoveryStore } from '../store/discovery.store';
 
 export default function ContactFields({ showLocation = true, showBestTime = false }) {
@@ -22,13 +23,12 @@ export default function ContactFields({ showLocation = true, showBestTime = fals
         {...bind('phone')}
       />
       {showLocation && (
-        <Field
+        <LocationPicker
           label="Where are you based?"
           optional
           className="sm:col-span-2"
-          autoComplete="address-level2"
-          placeholder="City, state"
-          {...bind('location')}
+          value={contact.location || ''}
+          onChange={(location) => setContact({ location })}
         />
       )}
       {showBestTime && (

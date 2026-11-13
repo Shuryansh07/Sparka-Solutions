@@ -8,6 +8,7 @@ import ChipGroup from '@/shared/components/ChipGroup';
 import { cn } from '@/lib/utils';
 import { buildGuideSteps, formatAnswer, validateContact } from '../lib/flow';
 import { useDiscoveryStore } from '../store/discovery.store';
+import LocationPicker from '@/shared/components/LocationPicker';
 import DictationButton, { appendTranscript } from './DictationButton';
 
 // The scripted "Guide Me, as a chat" conversation: the approved Discovery questions, one per turn.
@@ -138,6 +139,19 @@ function TextComposer({ placeholder, multiline, initial = '', onSend, error, req
   );
 }
 
+// State + city picker for "where are your vehicles"; sends a "Dallas, TX; Houston, TX" string.
+function LocationComposer({ initial, onSend }) {
+  const [value, setValue] = useState(initial);
+  return (
+    <div className="grid gap-3">
+      <LocationPicker multiple stacked value={value} onChange={setValue} />
+      <Button type="button" className="w-fit" disabled={!value.trim()} onClick={() => onSend(value)}>
+        <Send /> Send
+      </Button>
+    </div>
+  );
+}
+
 function QuestionComposer({ question, onAnswer, onMark }) {
   const answer = useDiscoveryStore((s) => s.answers[question.id]);
   const initial = answer?.status === 'answered' ? answer.value : question.type === 'multi' ? [] : '';
@@ -167,7 +181,10 @@ function QuestionComposer({ question, onAnswer, onMark }) {
           </Button>
         </>
       )}
-      {(question.type === 'text' || question.type === 'textarea') && (
+      {question.id === 'geography' && (
+        <LocationComposer initial={typeof initial === 'string' ? initial : ''} onSend={onAnswer} />
+      )}
+      {(question.type === 'text' || question.type === 'textarea') && question.id !== 'geography' && (
         <TextComposer
           voice
           multiline={question.type === 'textarea'}
