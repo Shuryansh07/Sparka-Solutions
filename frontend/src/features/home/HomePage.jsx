@@ -15,17 +15,13 @@ export default function HomePage() {
       <ProcessStrip />
       <section aria-labelledby="paths-title" className="py-20 md:py-28">
         <div className="container-page">
-          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-10">
-            {/* Above the heading on phones, to its right from tablet up. */}
-            <p className="type-wide w-fit text-2xl font-bold text-foreground md:order-last md:mt-2 md:text-3xl">
-              3 Journeys
-            </p>
-            <SectionHeading
-              id="paths-title"
-              title="However you like to begin, we’re ready."
-              intro="Answer a few quick questions, describe it in your own words, or simply talk to a person."
-            />
-          </div>
+          {/* One heading that flows across the full width; the intro keeps a readable measure. */}
+          <SectionHeading
+            id="paths-title"
+            className="max-w-none [&>p]:max-w-2xl"
+            title="However you like to begin, we’re ready. 3 Options to Move Forward"
+            intro="Answer a few quick questions, describe it in your own words, or simply talk to a person."
+          />
           <PathCards />
         </div>
       </section>
