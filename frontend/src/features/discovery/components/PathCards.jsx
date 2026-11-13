@@ -117,7 +117,14 @@ function PathCard({ path }) {
       <h3 className={cn('mt-2 font-bold', featured ? 'type-wide text-3xl md:text-4xl' : 'text-2xl')}>
         {ROUTES[key].label}
       </h3>
-      <p className={cn('mt-3 leading-relaxed', featured ? 'max-w-sm text-white/70' : 'text-muted-foreground')}>{text}</p>
+      <p
+        className={cn(
+          'mt-3 text-[17px] leading-relaxed font-medium md:text-lg',
+          featured ? 'max-w-sm text-white/75' : 'text-muted-foreground'
+        )}
+      >
+        {text}
+      </p>
 
       {featured && <QuestionPreview />}
 
