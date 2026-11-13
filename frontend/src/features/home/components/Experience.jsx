@@ -11,11 +11,11 @@ export default function Experience() {
       <div className="container-page grid items-center gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
         <div className="group relative isolate flex min-h-[420px] flex-col justify-end overflow-hidden rounded-3xl border border-white/10 p-7 md:min-h-[520px] md:p-10">
           <img
-            src="/images/tech-dashboard.webp"
-            alt="A vehicle dashboard at night with a glowing navigation map on the center screen"
+            src="/images/truck-cab.webp"
+            alt="Driver's view from a semi-truck cab at dusk, with a glowing GPS navigation map on the dashboard screen"
             loading="lazy"
-            width="1100"
-            height="1300"
+            width="1024"
+            height="1536"
             className="absolute inset-0 -z-20 size-full object-cover transition-transform duration-[1.6s] ease-[var(--ease-spark)] group-hover:scale-105"
           />
           <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-t from-night via-night/55 to-transparent" />

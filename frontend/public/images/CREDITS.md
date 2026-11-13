@@ -12,4 +12,6 @@ Photos are from Unsplash and used under the [Unsplash License](https://unsplash.
 | `fleet-pickups.webp` | Zoran Zonde Stojanovski | https://unsplash.com/photos/orange-pickup-trucks-on-parking-lot-7Qk4S86Hm_k |
 | `tech-dashboard.jpg` | Patrick Langwallner | https://unsplash.com/photos/the-dashboard-of-a-car-with-a-gps-device-vW52bhIkQ3I |
 
+`truck-cab.webp` is AI-generated with OpenAI `gpt-image-2` (no third-party photo).
+
 `logo.jpg` and `logo-mark.jpg` are Sparka brand assets.
