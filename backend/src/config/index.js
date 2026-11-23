@@ -27,8 +27,6 @@ export function chatConfig(env) {
 
 export const config = {
   chat: chatConfig(process.env),
-  // Speech-to-text model for the hold-to-talk button (uses the same OpenAI key as chat).
-  transcribeModel: process.env.TRANSCRIBE_MODEL || 'gpt-4o-transcribe',
   // AppSail injects X_ZOHO_CATALYST_LISTEN_PORT; PORT is the local fallback.
   port: Number(process.env.X_ZOHO_CATALYST_LISTEN_PORT || process.env.PORT || 9000),
   env: process.env.NODE_ENV || 'development',

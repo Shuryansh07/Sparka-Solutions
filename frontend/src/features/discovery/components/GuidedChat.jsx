@@ -8,8 +8,6 @@ import ChipGroup from '@/shared/components/ChipGroup';
 import { cn } from '@/lib/utils';
 import { buildGuideSteps, formatAnswer, validateContact } from '../lib/flow';
 import { useDiscoveryStore } from '../store/discovery.store';
-import LocationPicker from '@/shared/components/LocationPicker';
-import DictationButton, { appendTranscript } from './DictationButton';
 
 // The scripted "Guide Me, as a chat" conversation: the approved Discovery questions, one per turn.
 // Rendered inside the chat panel owned by ChatbotWidget.
@@ -89,9 +87,8 @@ function BotMessage({ step }) {
   );
 }
 
-function TextComposer({ placeholder, multiline, initial = '', onSend, error, required = true, inputType = 'text', voice = false }) {
+function TextComposer({ placeholder, multiline, initial = '', onSend, error, required = true, inputType = 'text' }) {
   const [value, setValue] = useState(initial);
-  const [voiceError, setVoiceError] = useState(null);
   const ref = useRef(null);
   useEffect(() => ref.current?.focus(), []);
   const send = (e) => {
@@ -118,37 +115,13 @@ function TextComposer({ placeholder, multiline, initial = '', onSend, error, req
           }}
           className={cn(fieldBase, multiline ? 'max-h-32 min-h-11 resize-none py-2.5' : 'h-11')}
         />
-        {voice && (
-          <DictationButton
-            compact
-            onError={setVoiceError}
-            onText={(text) => {
-              // Fill the box rather than sending, so the answer can be checked first.
-              setValue((v) => appendTranscript(v, text, { multiline, maxLength: 4000 }));
-              ref.current?.focus();
-            }}
-          />
-        )}
         <Button type="submit" size="icon" className="size-11 shrink-0" disabled={required && !value.trim()}>
           <Send />
           <span className="sr-only">Send</span>
         </Button>
       </div>
-      {(error || voiceError) && <p className="text-[13px] text-destructive">{error || voiceError}</p>}
+      {error && <p className="text-[13px] text-destructive">{error}</p>}
     </form>
-  );
-}
-
-// State + city picker for "where are your vehicles"; sends a "Dallas, TX; Houston, TX" string.
-function LocationComposer({ initial, onSend }) {
-  const [value, setValue] = useState(initial);
-  return (
-    <div className="grid gap-3">
-      <LocationPicker multiple stacked value={value} onChange={setValue} />
-      <Button type="button" className="w-fit" disabled={!value.trim()} onClick={() => onSend(value)}>
-        <Send /> Send
-      </Button>
-    </div>
   );
 }
 
@@ -181,12 +154,8 @@ function QuestionComposer({ question, onAnswer, onMark }) {
           </Button>
         </>
       )}
-      {question.id === 'geography' && (
-        <LocationComposer initial={typeof initial === 'string' ? initial : ''} onSend={onAnswer} />
-      )}
-      {(question.type === 'text' || question.type === 'textarea') && question.id !== 'geography' && (
+      {(question.type === 'text' || question.type === 'textarea') && (
         <TextComposer
-          voice
           multiline={question.type === 'textarea'}
           placeholder={question.placeholder}
           initial={typeof initial === 'string' ? initial : ''}

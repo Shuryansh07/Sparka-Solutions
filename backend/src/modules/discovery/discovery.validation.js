@@ -36,9 +36,7 @@ export function cleanAnswers(input, library) {
 export function cleanOrganized(rawInput, library) {
   // Optional suggestions: null or any non-object means "none".
   const input = rawInput && typeof rawInput === 'object' && !Array.isArray(rawInput) ? rawInput : {};
-  const options = (id) => library.questions.find((q) => q.id === id).options;
-  const someOf = (values, id) => (Array.isArray(values) ? values.filter((v) => options(id).includes(v)) : []);
-  const oneOf = (value, id) => (options(id).includes(value) ? value : '');
+  const interestOptions = library.questions.find((q) => q.id === 'interests').options;
   return {
     interests: someOf(input.interests, 'interests'),
     fleetSize: cleanText(input.fleetSize, 20),
