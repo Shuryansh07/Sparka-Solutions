@@ -47,7 +47,12 @@ export function organize(text) {
   const sizeMatch = text.match(FLEET_SIZE);
   const timing = TIMING_PATTERNS.find(([re]) => re.test(text))?.[1] || '';
 
+  // Without the AI we can still spot an email address or a US phone number.
+  const email = text.match(/[^\s@<>(),;:]+@[^\s@<>(),;:]+\.[a-z]{2,}/i)?.[0] || '';
+  const phone = text.match(/(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b/)?.[0] || '';
+
   return {
+    contact: { email, phone },
     interests: interests.length ? interests : ['Specialty Sourcing'],
     fleetSize: sizeMatch ? bucket(Number(sizeMatch[1])) : '',
     timing,

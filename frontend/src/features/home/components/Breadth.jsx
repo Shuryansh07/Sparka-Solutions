@@ -38,7 +38,12 @@ export default function Breadth() {
       <div className="container-page">
         <SectionHeading
           align="center"
-          title="If your fleet needs it, start with Sparka."
+          title={
+            <>
+              If your fleet needs&nbsp;it,
+              <br /> start with Sparka.
+            </>
+          }
           intro="Equipment, parts, accessories, technology, vehicle outfitting and specialty requests. Our job is to research and source the right fit, not to limit you to a short catalog."
         />
       </div>

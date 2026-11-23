@@ -1,13 +1,20 @@
 import { Info } from 'lucide-react';
+import { useState } from 'react';
 import Field from '@/shared/components/Field';
+import LocationPicker from '@/shared/components/LocationPicker';
 import OptionGroup from '@/shared/components/OptionGroup';
 import { useDiscoveryStore } from '../store/discovery.store';
+import DictationButton, { appendTranscript } from './DictationButton';
+
+const MAX_ANSWER = 4000;
 
 export default function QuestionStep({ question }) {
   const answer = useDiscoveryStore((s) => s.answers[question.id]);
   const setAnswer = useDiscoveryStore((s) => s.setAnswer);
   const value = answer?.status === 'answered' ? answer.value : question.type === 'multi' ? [] : '';
   const onChange = (v) => setAnswer(question.id, v);
+  const [voiceError, setVoiceError] = useState(null);
+  const multiline = question.type === 'textarea';
 
   return (
     <div className="grid gap-6">
@@ -33,15 +40,34 @@ export default function QuestionStep({ question }) {
           onChange={onChange}
         />
       )}
-      {(question.type === 'text' || question.type === 'textarea') && (
-        <Field
-          as={question.type === 'textarea' ? 'textarea' : 'input'}
-          label="Your answer"
-          placeholder={question.placeholder}
-          value={value}
-          maxLength={4000}
-          onChange={(e) => onChange(e.target.value)}
-        />
+      {question.id === 'geography' && (
+        <LocationPicker multiple label="Locations" value={typeof value === 'string' ? value : ''} onChange={onChange} />
+      )}
+      {(question.type === 'text' || question.type === 'textarea') && question.id !== 'geography' && (
+        <div className="grid gap-3">
+          <Field
+            as={multiline ? 'textarea' : 'input'}
+            label="Your answer"
+            placeholder={question.placeholder}
+            value={value}
+            maxLength={MAX_ANSWER}
+            onChange={(e) => onChange(e.target.value)}
+          />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-[13px] text-muted-foreground" aria-live="polite">
+              {voiceError ? <span className="font-medium text-destructive">{voiceError}</span> : 'Prefer to talk? Hold the button and speak.'}
+            </p>
+            <DictationButton
+              onError={setVoiceError}
+              onText={(text) => {
+                // Read the latest answer: the user may have kept typing while we transcribed.
+                const latest = useDiscoveryStore.getState().answers[question.id];
+                const current = latest?.status === 'answered' && typeof latest.value === 'string' ? latest.value : '';
+                onChange(appendTranscript(current, text, { multiline, maxLength: MAX_ANSWER }));
+              }}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

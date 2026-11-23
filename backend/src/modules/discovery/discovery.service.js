@@ -4,8 +4,9 @@ import { config } from '../../config/index.js';
 import { HttpError } from '../../core/http-error.js';
 import { cleanContact, cleanText } from '../../core/validation.js';
 import { createSubmission } from '../submissions/submission.service.js';
+import { extractLeadFields } from './lead-extractor.service.js';
 import { organize } from './summarizer.service.js';
-import { ROUTES, assertToken, cleanAnswers, cleanOrganized } from './discovery.validation.js';
+import { ROUTES, assertToken, cleanAnswers, cleanOrganized, cleanSuggestedContact } from './discovery.validation.js';
 
 export const library = JSON.parse(
   fs.readFileSync(new URL('./data/question-library.json', import.meta.url), 'utf8')
@@ -33,10 +34,25 @@ function cleanDraftPayload(body = {}) {
   };
 }
 
-export function organizeText(text) {
+// AI extraction of CRM Lead fields when OpenAI is configured; the rule-based organizer is
+// the fallback, so the customer can always continue. Output goes through cleanOrganized
+// either way, so only valid picklist values reach the review screen and the CRM.
+export async function organizeText(text, { extract = extractLeadFields } = {}) {
   const clean = cleanText(text, 8000);
   if (clean.length < 10) throw new HttpError(422, 'Tell us a little more so we can organize it.');
-  return organize(clean);
+  // Organized Lead fields plus `contact`: details about the writer for "How can we reach you?".
+  const shape = ({ contact, ...fields }) => ({
+    ...cleanOrganized(fields, library),
+    contact: cleanSuggestedContact(contact),
+  });
+  if (config.chat.enabled) {
+    try {
+      return shape(await extract(clean, library));
+    } catch (err) {
+      console.error(`[organize] AI extraction failed, using rules: ${err.message}`);
+    }
+  }
+  return shape(organize(clean));
 }
 
 export async function createDraft(repo, body) {

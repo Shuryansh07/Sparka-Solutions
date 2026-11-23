@@ -194,7 +194,7 @@ export default function GuideMePage() {
         >
           <AnimatePresence mode="wait" custom={direction} initial={false}>
             <motion.div key={stepKey} custom={direction} variants={stepMotion} initial="enter" animate="center" exit="exit">
-              {current.type === 'question' && <QuestionStep question={current.question} />}
+              {current.type === 'question' && <QuestionStep key={current.question.id} question={current.question} />}
 
               {current.type === 'offer' && (
                 <div className="grid justify-items-start gap-5">
